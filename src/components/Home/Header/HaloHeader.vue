@@ -1,6 +1,10 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light haloheader">
+    <a class="navbar-brand" href="#">
+      <img src="../../../assets/logo.svg" width="100" height="50" alt="" >
+    </a>
+
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -56,9 +60,9 @@ export default {
       ],
       findOutMore:[
         {id:'001',name:'教程'},
-        {id:'001',name:'直播'},
-        {id:'001',name:'众测'},
-        {id:'001',name:'排行榜'},
+        {id:'002',name:'直播'},
+        {id:'003',name:'众测'},
+        {id:'004',name:'排行榜'},
 
       ],
 
@@ -69,6 +73,8 @@ export default {
 </script>
 
 <style scoped>
-
+.haloheader{
+ padding-left: 100px;
+}
 
 </style>
