@@ -15,10 +15,12 @@
             v-for="(courseContent,id) of TheHeadContent"
             :key="id"
             class="nav-item active">
-          <a
+          <router-link
+              :to="courseContent.address"
               class="nav-link"
               href="#"
-          >{{courseContent.name}} <span class="sr-only">(current)</span></a>
+          >{{courseContent.name}} <span class="sr-only">(current)</span>
+          </router-link>
         </li>
         <li class="nav-item dropdown">
 
@@ -55,11 +57,11 @@ export default {
   data(){
     return{
       TheHeadContent:[
-        {id:'001',name:'头条'},
-        {id:'002',name:'问答'},
-        {id:'003',name:'热榜'},
-        {id:'004',name:'话题'},
-        {id:'005',name:'数码'},
+        {id:'001',name:'首页',address:'/home'},
+        {id:'002',name:'问答',address:'/wenda'},
+        {id:'003',name:'热榜',address:'/rebang'},
+        {id:'004',name:'话题',address:'/huati'},
+        {id:'005',name:'数码',address:'/shuma'},
       ],
       findOutMore:[
         {id:'001',name:'教程'},
