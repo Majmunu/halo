@@ -1,5 +1,6 @@
 <template>
-  <div class="box">
+
+  <div class="box col-xl-9">
     <div class="HighlightImage">
     <div class="ContentTitle">
       <h3>精彩内容</h3>

@@ -1,7 +1,7 @@
 <template>
-<div class="table">
+<div class="table clearfix">
   <h4>问答贡献</h4>
-  <div class="item">
+  <div class="item clearfix">
     <div class="id">
       <strong>1</strong>
     </div>

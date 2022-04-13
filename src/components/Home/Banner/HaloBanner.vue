@@ -1,5 +1,5 @@
 <template>
-  <div class="jumbotron jumbotron-fluid HomeBanner" style="background-color: skyblue">
+  <div class="jumbotron jumbotron-fluid HomeBanner col-xl justify-content-center" style="background-color: skyblue">
 
     <el-image
         style=""
@@ -38,6 +38,9 @@ export default {
 
 <style scoped>
 .HomeBanner{
+  float: none;
 
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

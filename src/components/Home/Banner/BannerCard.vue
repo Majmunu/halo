@@ -1,21 +1,26 @@
 <template>
-  <div class="box">
-  <ul>
-    <li v-for="(card,id) in CardContent" :key="id">
- <div class="BannerCard">
-   <i :class="`{{card.icon}}`"></i>
-   <div class="BannerContent">
-     <div class="BannerTitle" >
-       <h2>{{card.title}}</h2>
-     </div>
-     <div class="BannerText">
-       <P>{{card.text}}</P>
-     </div>
- </div>
- </div>
-    </li>
-  </ul>
+  <div class=" col-xl-12   wai">
+    <div class="col-xl-9 box clearfix align-items-center justify-content-center">
+      <ul>
+        <li v-for="(card,id) in CardContent" :key="id">
+          <div class="BannerCard col-xl-9  " >
+            <i :class="`{{card.icon}}`"></i>
+            <div class="BannerContent">
+              <div class="BannerTitle" >
+                <h2>{{card.title}}</h2>
+              </div>
+              <div class="BannerText">
+                <P>{{card.text}}</P>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
+
+
+
 </template>
 
 <script>
@@ -37,23 +42,32 @@ export default {
 
 <style scoped>
 .box{
-  width: 1140px;
-  margin-left: 190px;
+
+  float: none;
+  margin-left: 189px;
+  margin-right: auto;
+  border: 3px solid khaki;
+  display: flex;
+  position: absolute;
+
+
 }
 .BannerCard{
 
   border: 2px solid skyblue;
-  display: flex;
-  width: 261px;
-  margin-top: 30px;
-  margin-left: 12px;
   padding-left: 50px;
   background-color: white;
   border-radius:10px;
   text-align: left;
+
+
 }
 li{
   float: left;
   display: flex;
+}
+.wai{
+  border: 2px solid skyblue;
+  background-color: #2c3e50;
 }
 </style>

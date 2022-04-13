@@ -1,5 +1,5 @@
 <template>
-<div class="Recommend">
+<div class="Recommend col-xl-9">
   <div class="RecommendTitle">
     <h3>推荐专区</h3>
     <RecommendCard></RecommendCard>
@@ -28,6 +28,6 @@ export default {
 
 }
 .RecommendTitle{
-  padding-right: 1020px;
+  padding-right: 990px;
 }
 </style>

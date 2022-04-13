@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light haloheader">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light haloheader sticky-top">
     <a class="navbar-brand" href="#">
       <img src="../../../assets/logo.svg" width="100" height="50" alt="" >
     </a>
@@ -15,7 +15,10 @@
             v-for="(courseContent,id) of TheHeadContent"
             :key="id"
             class="nav-item active">
-          <a class="nav-link" href="#">{{courseContent.name}} <span class="sr-only">(current)</span></a>
+          <a
+              class="nav-link"
+              href="#"
+          >{{courseContent.name}} <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item dropdown">
 
