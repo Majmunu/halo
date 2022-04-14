@@ -39,7 +39,7 @@ export default {
  /* width: 1140px;
   margin-left: 189px;
   margin-top: 80px;*/
-  background-color: #99a9bf;
+
   border: 3px solid khaki;
 }
 .box{

@@ -1,15 +1,14 @@
 <template>
   <div class="col-xl-9 row clearfix">
     <el-menu  class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1">最新</el-menu-item>
-      <el-menu-item index="2">待回答</el-menu-item>
+      <el-menu-item index="1">今日热门</el-menu-item>
       <el-menu-item index="3">周榜</el-menu-item>
       <el-menu-item index="4">月榜</el-menu-item>
 
 
     </el-menu>
     <div class="twt">
-      <el-button type="success">提问题</el-button>
+      <el-button type="success">发动态</el-button>
     </div>
 
   </div>
@@ -30,10 +29,12 @@ export default {
 
 }
 .twt{
-  float: right;
+position: absolute;
+  margin-top: 10px;
+  margin-left: 300px;
 
-  margin-left: 440px;
-  margin-top: 20px;
+
+
 
 }
 </style>

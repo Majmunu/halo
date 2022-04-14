@@ -4,7 +4,7 @@
     <li v-for="(item,id) in list" :key="id" >
       <div class="item col-xl-12">
         <div class="image" >
-          <img src="src/assets/images/home/table.webp" alt="">
+          <img :src="item.src" alt="" width="80" height="67">
         </div>
         <div class="content">
           <h5>真我Q5发布会定档</h5>
@@ -23,14 +23,14 @@ export default {
   data(){
     return{
       list:[
-        {id:'001',src:'',title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'002',src:'',title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'003',src:'',title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'004',src:'',title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'005',src:'',title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'006',src:'',title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'007',src:'',title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'008',src:'',title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
+        {id:'001',src:require('@/assets/images/home/w.jpg'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
+        {id:'002',src:require('@/assets/images/home/table.webp'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
+        {id:'003',src:require('@/assets/images/home/w.jpg'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
+        {id:'004',src:require('@/assets/images/home/table.webp'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
+        {id:'005',src:require('@/assets/images/home/w.jpg'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
+        {id:'006',src:require('@/assets/images/home/table.webp'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
+        {id:'007',src:require('@/assets/images/home/w.jpg'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
+        {id:'008',src:require('@/assets/images/home/table.webp'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
       ]
     }
   }
@@ -56,7 +56,7 @@ ul{
 
 }
 .image{
-  background-color: purple;
+
   width: 80px;
   height: 67px;
   float: left;

@@ -3,7 +3,7 @@
     <el-autocomplete
         v-model="state"
         :fetch-suggestions="querySearchAsync"
-        placeholder="请输入内容"
+        placeholder="请输入你想查询的数码"
         @select="handleSelect"
     ></el-autocomplete>
   </div>

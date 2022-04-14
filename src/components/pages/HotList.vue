@@ -1,7 +1,7 @@
 <template>
   <div class="col-xl-9 root clearfix">
 
-    <the-sidebar-navigation/>
+    <the-sidebar-navigation1/>
 
 
     <TopicsItem/>
@@ -15,13 +15,13 @@
 </template>
 
 <script>
-import theSidebarNavigation from "@/components/pages/Topics/theSidebarNavigation";
+import theSidebarNavigation1 from "@/components/pages/HotList/theSidebarNavigation1";
 import TopicsItem from "@/components/pages/Topics/TopicsItem";
 import TheTopicsCard from "@/components/pages/Topics/TheTopicsCard";
 export default {
   name: "HotList",
   components:{
-    theSidebarNavigation,
+    theSidebarNavigation1,
     TheTopicsCard,
     TopicsItem
   }

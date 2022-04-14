@@ -3,7 +3,7 @@
     <el-carousel height="340px">
       <el-carousel-item v-for="item in item" :key="item">
         <div class="blockContent" >
-          <h3 class="small">{{item}}</h3>
+          <img :src="item.url" alt="图片加载失败" width="330px" height="340px">
         </div>
       </el-carousel-item>
     </el-carousel>
@@ -18,7 +18,11 @@ export default {
   name: "HighlightImage",
   data(){
     return{
-      item:['测试1','测试2','测试3','测试4'
+      item:[
+        {url:require('@/assets/images/home/1.jpg')},
+        {url:require('@/assets/images/home/2.jpg')},
+        {url:require('@/assets/images/home/w.jpg')},
+
       ]
     }
   }
