@@ -1,11 +1,10 @@
 <template>
-  <div class="block">
+  <div class="block col-xl-4">
     <el-carousel height="340px">
       <el-carousel-item v-for="item in item" :key="item">
         <div class="blockContent" >
           <h3 class="small">{{item}}</h3>
         </div>
-
       </el-carousel-item>
     </el-carousel>
     <div>
@@ -28,10 +27,10 @@ export default {
 
 <style scoped>
 .block{
-  width: 355px;
+  /*width: 355px;*/
   border: 3px solid red;
   float: left;
-  height: 365px;
+ /* height: 365px;*/
 
 }
 .el-carousel__item h3 {

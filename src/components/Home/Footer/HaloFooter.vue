@@ -7,23 +7,18 @@
       <h2>发现科技新生活</h2>
     </div>
     <div>
-      <ul>
-        <li>
-          关于酷安|
-        </li>
-        <li>
-          联系合作|
-        </li>
-        <li>
-          加入我们|
-        </li>
-        <li>
-         版权声明|
-        </li>
-        <li>
-          开发者平台
-        </li>
-      </ul>
+
+      <div>
+        <span>关于酷安</span>
+        <el-divider direction="vertical"></el-divider>
+        <span> 联系合作</span>
+        <el-divider direction="vertical"></el-divider>
+        <span> 加入我们</span>
+        <el-divider direction="vertical"></el-divider>
+        <span>  版权声明</span>
+        <el-divider direction="vertical"></el-divider>
+        <span> 开发者平台</span>
+      </div>
     </div>
     <div>
       <p>Copyright © 2010-2021 酷安网, All Rights Reserved.</p>
@@ -34,11 +29,16 @@
     <div class="FooterRight col-xl-6 ">
       <div class="col-xl-6 FooterRightImage">
         <img src="https://coolapk.com/qr/image?data=base64:aHR0cHM6Ly93ZWliby5jb20vdS8xNzQ2NTIzOTc0&h=514f5cf8" alt="">
-        <span>微信公众号</span>
+        <div>
+          <span>微信公众号</span>
+        </div>
+
       </div>
       <div class="col-xl-6 FooterLeftImage">
         <img src="https://coolapk.com/qr/image?data=base64:aHR0cDovL3dlaXhpbi5xcS5jb20vci9IQ2s4SlBMRWpLLXpyYlpIOTN3Tw~~&h=5aac8427" alt="">
+        <<div>
         <span>微博</span>
+      </div>
       </div>
     </div>
   </div>
@@ -57,8 +57,9 @@ export default {
 }
 .HaloFooter{
   border: 3px solid chocolate;
-  width: 1140px;
-  margin-left: 189px;
+
+  margin-left: auto;
+  margin-right: auto;
 }
 ul{
   list-style-type: none;
@@ -83,5 +84,8 @@ li{
   float: right;
   display: inline;
   border: 3px solid green;
+}
+.FooterRightImage{
+  float: left;
 }
 </style>

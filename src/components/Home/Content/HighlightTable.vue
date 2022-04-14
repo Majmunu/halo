@@ -1,8 +1,8 @@
 <template>
-<div class="HighlightTable">
-  <ul>
-    <li v-for="(item,id) in list" :key="id">
-      <div class="item">
+<div class="HighlightTable col-xl-8">
+  <ul class="col-xl-12">
+    <li v-for="(item,id) in list" :key="id" >
+      <div class="item col-xl-12">
         <div class="image" >
           <img src="src/assets/images/home/table.webp" alt="">
         </div>
@@ -39,8 +39,8 @@ export default {
 
 <style scoped>
 .HighlightTable{
-  width: 778px;
-  border: 3px solid red;
+  /*width: 778px;*/
+  border: 3px solid slateblue;
   float: right;
 
 
@@ -50,8 +50,10 @@ ul{
 }
 .item{
   border: 3px solid gold;
-  width: 356px;
-  height: 76px;
+ /* width: 356px;
+  height: 76px;*/
+
+
 }
 .image{
   background-color: purple;

@@ -9,8 +9,8 @@ import ElementUI from 'element-ui';
 
 //引入样式
 import 'element-ui/lib/theme-chalk/index.css'
-//import ViewUI from 'view-design';
-//import 'view-design/dist/styles/iview.css';
+import ViewUI from 'view-design';
+import 'view-design/dist/styles/iview.css';
 
 //VueRouter
 import VueRouter from "vue-router"
@@ -21,7 +21,9 @@ Vue.config.productionTip = false
 //应用插件
 Vue.use(VueRouter);
 Vue.use(ElementUI);
-//Vue.use(ViewUI);
+Vue.use(ViewUI);
+
+
 new Vue({
   render: h => h(App),
   router:router

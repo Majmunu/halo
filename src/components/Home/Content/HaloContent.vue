@@ -1,17 +1,19 @@
 <template>
-
+<div class="col-xl-12 root ">
   <div class="box col-xl-9">
-    <div class="HighlightImage">
-    <div class="ContentTitle">
-      <h3>精彩内容</h3>
-    </div>
-    <div class="table">
-      <HighlightImage/>
-      <HighlightTable/>
-    </div>
+    <div class="HighlightImage clearfix ">
+      <div class="ContentTitle">
+        <h3>精彩内容</h3>
+      </div>
+      <div class="table ">
+        <HighlightImage/>
+        <HighlightTable/>
+      </div>
 
+    </div>
   </div>
-  </div>
+
+</div>
 
 
 </template>
@@ -31,14 +33,20 @@ export default {
 <style scoped>
 
 .ContentTitle{
-  padding-right: 1020px;
+
 }
 .HighlightImage{
-  width: 1140px;
+ /* width: 1140px;
   margin-left: 189px;
-  margin-top: 80px;
+  margin-top: 80px;*/
   background-color: #99a9bf;
-
-
+  border: 3px solid khaki;
+}
+.box{
+  margin-left: auto;
+  margin-right: auto;
+}
+.root{
+  border: 3px solid lightcoral;
 }
 </style>

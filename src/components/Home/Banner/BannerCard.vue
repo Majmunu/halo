@@ -1,5 +1,5 @@
 <template>
-  <div class=" col-xl-12   wai">
+  <div class=" col-xl-12 clearfix wai">
     <div class="col-xl-9 box clearfix align-items-center justify-content-center">
       <ul>
         <li v-for="(card,id) in CardContent" :key="id">
@@ -69,5 +69,7 @@ li{
 .wai{
   border: 2px solid skyblue;
   background-color: #2c3e50;
+  margin-left: auto;
+  margin-right:auto;
 }
 </style>

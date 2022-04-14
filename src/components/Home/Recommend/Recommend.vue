@@ -1,10 +1,13 @@
 <template>
-<div class="Recommend col-xl-9">
-  <div class="RecommendTitle">
-    <h3>推荐专区</h3>
-    <RecommendCard></RecommendCard>
+  <div class="col-xl-12">
+    <div class="Recommend col-xl-9">
+      <div class="RecommendTitle">
+        <h3>推荐专区</h3>
+        <RecommendCard></RecommendCard>
 
+      </div>
   </div>
+
 </div>
 </template>
 
@@ -21,13 +24,14 @@ export default {
 <style scoped>
 .Recommend{
   border: 3px solid purple;
-  margin-top: 380px;
+
   width: 1140px;
-  margin-left: 189px;
+ margin-left: auto;
+  margin-right: auto;
 
 
 }
 .RecommendTitle{
-  padding-right: 990px;
+
 }
 </style>

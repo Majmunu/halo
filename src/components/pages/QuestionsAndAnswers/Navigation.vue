@@ -19,7 +19,7 @@ export default {
 
 <style scoped>
 .row{
-  border: 3px solid slateblue;
+
   margin-left: auto;
   margin-right: auto;
 

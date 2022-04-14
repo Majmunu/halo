@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="col-xl-9 root">
   <h2>数码</h2>
   <SearchBox/>
 
@@ -17,5 +17,9 @@ export default {
 </script>
 
 <style scoped>
-
+.root{
+  margin-left: auto;
+  margin-right: auto;
+  border: 3px solid salmon;
+}
 </style>

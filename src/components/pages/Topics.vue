@@ -1,28 +1,36 @@
 <template>
   <div class="col-xl-9 root clearfix">
-    <the-sidebar-navigation/>
-    <Post/>
-    <TheTopicsCard/>
+
+      <the-sidebar-navigation/>
+
+
+      <TopicsItem/>
+
+
+      <TheTopicsCard/>
+
+
+
   </div>
 </template>
 
 <script>
 import theSidebarNavigation from "@/components/pages/Topics/theSidebarNavigation";
-
+import TopicsItem from "@/components/pages/Topics/TopicsItem";
 import TheTopicsCard from "@/components/pages/Topics/TheTopicsCard";
 export default {
   name: "Topics",
   components:{
     theSidebarNavigation,
-
-    TheTopicsCard
+    TheTopicsCard,
+    TopicsItem
   }
 }
 </script>
 
 <style scoped>
 .root{
-  border: 3px solid aqua;
+
   margin-left: auto;
   margin-right: auto;
 }

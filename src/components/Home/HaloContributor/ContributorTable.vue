@@ -1,5 +1,5 @@
 <template>
-<div class="table clearfix">
+<div class="table clearfix col-xl-6">
   <h4>问答贡献</h4>
   <div class="item clearfix">
     <div class="id">
@@ -26,10 +26,11 @@ export default {
 
 <style scoped>
 .table{
-  width: 546px;
+
   height: 375px;
   border: 3px solid hotpink;
   background-color: white;
+  margin-top: 50px;
 }
 .item{
   width: 244px;
