@@ -1,12 +1,13 @@
 <template>
   <div class="box col-xl-12 ">
     <div class="Contributor col-xl-9">
+      <el-card class="box-card card">
       <div class="RecommendTitle">
         <h3>社区贡献者</h3>
       </div>
       <ContributorTable/>
+      </el-card>
     </div>
-
 
   </div>
 
@@ -24,11 +25,11 @@ export default {
 
 <style scoped>
 .box{
-  border: 3px solid green;
+  /*border: 3px solid green;*/
   background-color: #e9ecef;
 }
 .Contributor{
-  border: 3px solid purple;
+ /* border: 3px solid purple;*/
   margin-top: 10px;
   margin-left: auto;
   margin-right: auto;

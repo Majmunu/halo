@@ -1,12 +1,15 @@
 <template>
-  <router-view></router-view>
+  <div class="root">
+
+    <List/>
+  </div>
 </template>
 
 <script>
 
 import List from "@/components/pages/QuestionsAndAnswers/List";
 export default {
-  name: "QuestionsAndAnswers",
+  name: "qASubpage",
   components:{
 
     List

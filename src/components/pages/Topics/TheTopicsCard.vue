@@ -1,5 +1,6 @@
 <template>
 <div class="root col-xl-3">
+  <el-button type="success">发动态</el-button>
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span>热门标签</span>
@@ -114,5 +115,9 @@ export default {
 .root{
   float: right;
   margin-right: 300px;
+  margin-top: 15px;
+}
+.box-card{
+  margin-top: 15px;
 }
 </style>

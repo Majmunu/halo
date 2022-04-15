@@ -1,6 +1,7 @@
 <template>
 <div class="box col-xl-12 clearfix">
   <div class="HaloFooter col-xl-9 clearfix">
+    <el-card class="box-card card">
   <div class="FooterLeft col-xl-6">
     <div>
       <h2>?????</h2>
@@ -41,6 +42,7 @@
       </div>
       </div>
     </div>
+    </el-card>
   </div>
 </div>
 </template>
@@ -53,10 +55,11 @@ export default {
 
 <style scoped>
 .box{
-  border:3px solid red;
+  /*border:3px solid red;*/
+  margin-top: 20px;
 }
 .HaloFooter{
-  border: 3px solid chocolate;
+  /*border: 3px solid chocolate;*/
 
   margin-left: auto;
   margin-right: auto;
@@ -78,12 +81,12 @@ li{
 .FooterLeftImage{
   float: left;
   display: inline;
-  border: 3px solid slateblue;
+ /* border: 3px solid slateblue;*/
 }
 .FooterRight{
   float: right;
   display: inline;
-  border: 3px solid green;
+  /*border: 3px solid green;*/
 }
 .FooterRightImage{
   float: left;

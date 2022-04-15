@@ -1,6 +1,5 @@
 <template>
-
-
+  <el-card class="box-card sticky-top" :body-style="{ padding: '0px' }">
       <nav class="navbar navbar-expand-lg navbar-light bg-light haloheader sticky-top font">
         <a class="navbar-brand" href="#">
           <img src="../../../assets/logo.svg" width="100" height="50" alt="" >
@@ -20,7 +19,8 @@
               <router-link
                   :to="courseContent.address"
                   class="nav-link"
-                  href="#"
+                  active-class="active"
+
               >{{courseContent.name}} <span class="sr-only">(current)</span>
               </router-link>
             </li>
@@ -30,12 +30,13 @@
                 发现
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a
+                <router-link
                     v-for="(findContent,id) of findOutMore"
                     :key="id"
                     class="dropdown-item"
-                    href="#"
-                >{{findContent.name}}</a>
+
+                    :to="findContent.address"
+                >{{findContent.name}}</router-link>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">广告投放</a>
               </div>
@@ -43,12 +44,12 @@
           </ul>
           <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">注册登录</button>
           </form>
         </div>
       </nav>
 
-
+  </el-card>
 
 </template>
 
@@ -67,10 +68,10 @@ export default {
         {id:'005',name:'数码',address:'/shuma'},
       ],
       findOutMore:[
-        {id:'001',name:'教程'},
-        {id:'002',name:'直播'},
-        {id:'003',name:'众测'},
-        {id:'004',name:'排行榜'},
+        {id:'001',name:'教程',address:'/jiaocheng'},
+        {id:'002',name:'直播',address:'/zhibo'},
+        {id:'003',name:'众测',address:'/zhongce'},
+        {id:'004',name:'排行榜',address:'/paihangbang'},
 
       ],
 
@@ -96,4 +97,8 @@ export default {
 .box{
   background-color: white;
 }
+.nav-link:visited{
+  color: #049861;
+}
+
 </style>

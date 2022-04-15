@@ -1,27 +1,40 @@
 <template>
   <div class="root">
     <div class="Nav col-xl-6 clearfix">
-      <Navigation1/>
+
 
       <List item-layout="vertical" class="clearfix">
+
         <el-card class="box-card">
-        <ListItem v-for="item in data" :key="item.title">
-          <ListItemMeta :avatar="item.avatar" :title="item.title" :description="item.description" shadow="hover"/>
-          {{ item.content }}
-          <template slot="action">
+          <Tabs type="card">
+            <TabPane label="今日热门">
 
-            <li>
-              <Icon type="ios-thumbs-up-outline" /> 234
-            </li>
-            <li>
-              <Icon type="ios-chatbubbles-outline" /> 345
-            </li>
-          </template>
-          <template slot="extra">
-            <img src="https://dev-file.iviewui.com/5wxHCQMUyrauMCGSVEYVxHR5JmvS7DpH/large" style="width: 280px">
-          </template>
+              <ListItem
+                  v-for="item in data"
+                  :key="item.title"
+                  class="test"
+              >
+                <ListItemMeta :avatar="item.avatar" :title="item.title" :description="item.description" shadow="hover"/>
+                {{ item.content }}
+                <template slot="action">
 
-        </ListItem>
+                  <li>
+                    <Icon type="ios-thumbs-up-outline" /> 234
+                  </li>
+                  <li>
+                    <Icon type="ios-chatbubbles-outline" /> 345
+                  </li>
+                </template>
+                <template slot="extra">
+                  <img src="https://dev-file.iviewui.com/5wxHCQMUyrauMCGSVEYVxHR5JmvS7DpH/large" style="width: 280px" alt=""
+                       @click="showArticle">
+                </template>
+              </ListItem>
+            </TabPane>
+            <TabPane label="最新发布">最新发布</TabPane>
+            <TabPane label="最高热度">最高热度</TabPane>
+          </Tabs>
+
         </el-card>
       </List>
 
@@ -41,25 +54,35 @@ export default {
     return {
   data:[
     {
-      title: 'This is title 1',
-      description: 'This is description, this is description, this is description.',
-      avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
+      title: '我是标题',
+      description: '我是内容我是内容我是内容我是内容我是内容我是内容我是内容',
+      avatar:require('@/assets/2022.jpg')
 
     },
     {
-      title: 'This is title 2',
-      description: 'This is description, this is description, this is description.',
-      avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
+      title: '我是标题',
+      description: '我是内容我是内容我是内容我是内容我是内容我是内容我是内容',
+      avatar: require('@/assets/2022.jpg')
+
 
     },
     {
-      title: 'This is title 3',
-      description: 'This is description, this is description, this is description.',
-      avatar: 'https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar',
+      title: '我是标题',
+      description: '我是内容我是内容我是内容我是内容我是内容我是内容我是内容',
+      avatar: require('@/assets/2022.jpg')
 
     }
-  ]
-}}}
+  ],
+
+}},
+  methods:{
+    showArticle(){
+      this.$router.push({
+        name:'tiezi'
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -67,7 +90,11 @@ export default {
   float: left;
   /*position: absolute;*/
 
+}
+.test{
 
-
+}
+.root{
+  margin-top: 15px;
 }
 </style>

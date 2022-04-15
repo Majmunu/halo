@@ -40,7 +40,7 @@ export default {
 <style scoped>
 .HighlightTable{
   /*width: 778px;*/
-  border: 3px solid slateblue;
+  /*border: 3px solid slateblue;*/
   float: right;
 
 
@@ -49,7 +49,7 @@ ul{
   list-style-type: none;
 }
 .item{
-  border: 3px solid gold;
+ /* border: 3px solid gold;*/
  /* width: 356px;
   height: 76px;*/
 

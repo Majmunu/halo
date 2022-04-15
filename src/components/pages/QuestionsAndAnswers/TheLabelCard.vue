@@ -1,5 +1,6 @@
 <template>
 <div class="root">
+  <el-button type="success">提问题</el-button>
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span>热门标签</span>
@@ -111,5 +112,7 @@ export default {
   margin-top: 15px;
   text-align: left;
 }
-
+.box-card{
+  margin-top: 10px;
+}
 </style>

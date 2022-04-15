@@ -1,10 +1,7 @@
 <template>
   <div id="app">
-    <HaloHeader/>
-
+    <HaloHeader v-if="$route.path!='/login'"/>
     <router-view></router-view>
-
-
   </div>
 
 </template>

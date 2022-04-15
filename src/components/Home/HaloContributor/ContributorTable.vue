@@ -28,14 +28,14 @@ export default {
 .table{
 
   height: 375px;
-  border: 3px solid hotpink;
+  /*border: 3px solid hotpink;*/
   background-color: white;
   margin-top: 50px;
 }
 .item{
   width: 244px;
   height: 44px;
-  border: 3px solid hotpink;
+  /*border: 3px solid hotpink;*/
   text-align: center;
   align-content: center;
 }

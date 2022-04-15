@@ -83,7 +83,7 @@ export default {
   margin-right: auto;
   display: flex;
   position: absolute;
-  border: 3px solid purple;
+  /*border: 3px solid purple;*/
 
 
 }
@@ -94,7 +94,7 @@ export default {
   background-color: white;
   border-radius:10px;
   text-align: left;
-  border: 3px solid purple;
+  /*border: 3px solid purple;*/
 
 
 }
@@ -112,18 +112,18 @@ li{
   margin-left: auto;
   margin-right:auto;
   margin-top: 15px;
-  border: 3px solid skyblue;
+ /* border: 3px solid skyblue;*/
 
 
 }
 .icon{
   float: left;
-  border: 3px solid red;
+  /*border: 3px solid red;*/
   display: inline;
 }
 .BannerContent{
   float: left;
-  border: 3px solid lightcoral;
+  /*border: 3px solid lightcoral;*/
   display: inline;
 }
 .ul{

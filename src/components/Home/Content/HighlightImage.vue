@@ -32,7 +32,7 @@ export default {
 <style scoped>
 .block{
   /*width: 355px;*/
-  border: 3px solid red;
+  /*border: 3px solid red;*/
   float: left;
  /* height: 365px;*/
 

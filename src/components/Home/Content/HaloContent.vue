@@ -1,6 +1,8 @@
 <template>
 <div class="col-xl-12 root ">
+
   <div class="box col-xl-9">
+    <el-card class="box-card card">
     <div class="HighlightImage clearfix ">
       <div class="ContentTitle">
         <h3>精彩内容</h3>
@@ -11,6 +13,7 @@
       </div>
 
     </div>
+      </el-card>
   </div>
 
 </div>
@@ -40,13 +43,13 @@ export default {
   margin-left: 189px;
   margin-top: 80px;*/
 
-  border: 3px solid khaki;
+  /*border: 3px solid khaki;*/
 }
 .box{
   margin-left: auto;
   margin-right: auto;
 }
 .root{
-  border: 3px solid lightcoral;
+  /*border: 3px solid lightcoral;*/
 }
 </style>

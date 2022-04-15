@@ -5,6 +5,17 @@ import HotList from "@/components/pages/HotList";
 import QuestionsAndAnswers from "@/components/pages/QuestionsAndAnswers";
 import Topics from "@/components/pages/Topics";
 import HaloHome from "@/components/pages/HaloHome";
+import Course from "@/components/pages/Course";
+import LIVE from "@/components/pages/LIVE";
+import publicTest from "@/components/pages/publicTest";
+import RankingList from "@/components/pages/RankingList";
+import CourseHome from "@/components/pages/Course/CourseHome";
+import questionAndAnswerPage from "@/components/pages/level3Page/questionAndAnswerPage";
+import QASubpage from "@/components/pages/sonHome/qASubpage";
+import TheArticleDetails from "@/components/pages/level3Page/TheArticleDetails";
+import hotListPage from "@/components/pages/sonHome/hotListPage";
+import login from "@/components/pages/login";
+
 			// 引入VueRouter
 Vue.use(VueRouter)
 
@@ -13,11 +24,41 @@ export default new VueRouter({
     routes:[
         {
             path:"/wenda",
-            component:QuestionsAndAnswers
+            component:QuestionsAndAnswers,
+            redirect:"/wenda/home",
+            children:[
+                {
+                    name:"question",
+                    path: "/wenda/question",
+                    component: questionAndAnswerPage
+                },
+                {
+                    name:'qahome',
+                    path:"/wenda/home",
+                    component:QASubpage
+                },
+
+
+            ]
         },
         {
             path:"/rebang",
-            component:HotList
+            component:HotList,
+            redirect:'/rebang/home',
+            children:[
+                {
+                    name:'tiezi',
+                    path: '/rebang/tiezi',
+                    component: TheArticleDetails
+                },
+                {
+                    name:'rbhome',
+                    path:'/rebang/home',
+                    component: hotListPage
+                },
+
+            ]
+
         },
         {
             path:"/huati",
@@ -30,6 +71,39 @@ export default new VueRouter({
         {
             path:"/home",
             component:HaloHome
+        },
+        {
+            path:"/jiaocheng",
+            component:Course,
+            children:[
+                {
+                    name:'jchome',
+                    path:'/jiaocheng/jchome',
+                    component:CourseHome
+                },
+                {
+                    path:'/jiaocheng',
+                    redirect:"/jiaocheng/jchome"
+                }
+
+            ]
+        },
+        {
+            path:"/zhibo",
+            component:LIVE
+        },
+        {
+            path:"/zhongce",
+            component:publicTest
+        },
+        {
+            path:"/paihangbang",
+            component:RankingList
+        },
+        {
+            path:'/login',
+            component:login
+
         },
         {
             path:'*',

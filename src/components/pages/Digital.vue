@@ -42,7 +42,7 @@
     <!--?新品发布轮播图-->
     <el-card class="box-card">
       <h3>🎉新品发布</h3>
-      <el-carousel :interval="4000" type="card" height="200px">
+      <el-carousel :interval="4000" type="card" height="200px" class="new">
         <el-carousel-item v-for="(image,index) in item" :key="index">
           <img :src="image.url" alt="图片加载失败" width="537px" height="200px">
           <h3 class="medium">
@@ -52,10 +52,10 @@
     </el-card>
     <!--!今日热门-->
     <el-card class="box-card">
+      <h3>📅今日热门</h3>
       <div>
-        <h3>📅今日热门</h3>
-        <div>
-          <el-row class="col-xl-12 xiaomi">
+        <div class="new">
+          <el-row class="col-xl-12 xiaomi ">
             <el-col :span="8" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 2 : 0" class="col-xl-3 ">
               <el-card :body-style="{ padding: '0px' }" >
                 <img src="@/assets/images/digital/section1-1.jpg" class="image" width="250" height="118">
@@ -63,7 +63,7 @@
                   <span>小米11 Ultra</span>
                   <div class="bottom clearfix">
                     <time class="time">{{ currentDate }}</time>
-                    <el-button type="text" class="button">🚀71.1万热度</el-button>
+                    <el-button type="text" class="button">🥇71.1万热度</el-button>
                   </div>
                 </div>
               </el-card>
@@ -75,6 +75,7 @@
     </el-card>
 <!--@时间线-->
     <el-card class="box-card">
+      <h3>📅发布日历</h3>
     <div class="block timeline col-xl-2">
       <el-timeline>
         <el-timeline-item
@@ -152,19 +153,19 @@ export default {
 .root{
   margin-left: auto;
   margin-right: auto;
-  border: 3px solid salmon;
+  border: 3px solid #e9ecef;
 }
 .search{
   float: left;
   display: flex;
   flex-direction: column;
-  background-color: skyblue;
+  background-color: #e9ecef;
 }
 .header{
-  border: 3px solid skyblue;
+  border: 3px solid #e9ecef;
 }
 .tag{
-  border: 3px solid deeppink;
+  border: 3px solid #e9ecef;
   padding: 10px;
 
 }
@@ -201,7 +202,7 @@ export default {
 
 }
 .xiaomi{
-  border: 3px solid magenta;
+margin-top: 50px;
 }
 .timeline{
   float: left;
@@ -209,5 +210,12 @@ export default {
 }
 .date{
   float: right;
+}
+h3{
+  float: left;
+  position: absolute;
+}
+.new{
+  margin-top: 25px;
 }
 </style>

@@ -5,7 +5,11 @@
     <div class="container">
       <h1 class="display-4">{{BannerTitle}}</h1>
       <p class="lead">{{BannerText}}</p>
-      <a class="btn btn-success btn-lg" href="#" role="button">{{BannerButton}}</a>
+      <router-link
+          to="/login"
+          class="btn btn-success btn-lg"
+          href="#" role="button"
+      >{{BannerButton}}</router-link>
     </div>
 <BannerCard/>
   </div>
