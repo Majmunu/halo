@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card sticky-top" :body-style="{ padding: '0px' }">
+<!--  <el-card class="box-card sticky-top" :body-style="{ padding: '0px' }">-->
       <nav class="navbar navbar-expand-lg navbar-light bg-light haloheader sticky-top font">
         <a class="navbar-brand" href="#">
           <img src="../../../assets/logo.svg" width="100" height="50" alt="" >
@@ -49,7 +49,7 @@
         </div>
       </nav>
 
-  </el-card>
+<!--  </el-card>-->
 
 </template>
 

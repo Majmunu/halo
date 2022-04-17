@@ -15,6 +15,7 @@ import QASubpage from "@/components/pages/sonHome/qASubpage";
 import TheArticleDetails from "@/components/pages/level3Page/TheArticleDetails";
 import hotListPage from "@/components/pages/sonHome/hotListPage";
 import login from "@/components/pages/login";
+import Backstage from "@/components/pages/Backstage";
 
 			// 引入VueRouter
 Vue.use(VueRouter)
@@ -104,6 +105,10 @@ export default new VueRouter({
             path:'/login',
             component:login
 
+        },
+        {
+            path:'/houtai',
+            component:Backstage
         },
         {
             path:'*',

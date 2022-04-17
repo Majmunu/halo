@@ -41,7 +41,7 @@ export default {
 
 <style scoped>
 .root{
-
+overflow: hidden;
 
 }
 .box-card{

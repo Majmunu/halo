@@ -62,7 +62,7 @@
                 <div style="padding: 14px;">
                   <span>小米11 Ultra</span>
                   <div class="bottom clearfix">
-                    <time class="time">{{ currentDate }}</time>
+                    <time class="time" time>{{ currentDate }}</time>
                     <el-button type="text" class="button">🥇71.1万热度</el-button>
                   </div>
                 </div>
