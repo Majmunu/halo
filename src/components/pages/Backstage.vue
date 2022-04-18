@@ -1,7 +1,13 @@
 <template>
-  <div style="min-height: 100vh">
-    <el-container style="height:100%;">
-      <el-aside :width="sideWidth+'px'" style="background-color: rgb(238, 241, 246);min-height: 100vh;">
+  <div style="min-height: 100vh;background-color: white;">
+    <el-container style="height:100%;"  size="mini">
+
+      <el-aside
+          :width="sideWidth+'px'"
+          style="background-color: rgb(238, 241, 246);
+          min-height: 100vh;
+          box-shadow: 2px 0 6px rgb(0 21 41 / 35%);
+      ">
         <el-menu
             :default-openeds="['1', '3']"
             style="min-height: 100%;
@@ -78,8 +84,8 @@
             display: flex"
         >
           <!--          收缩按钮-->
-          <div style="flex: 1;font-size: 30px">
-            <span :class="collapseBtnclass" style="cursor: pointer; margin-right: 1130px" @click="collapse">
+          <div style="flex: 1;font-size: 30px;text-align: left">
+            <span :class="collapseBtnclass" style="cursor: pointer;" @click="collapse">
             </span>
           </div>
           <el-dropdown style="width: 170px;cursor: pointer">
@@ -93,16 +99,69 @@
           </el-dropdown>
 
         </el-header>
+        <div>
+          <Breadcrumb class="bread">
+            <BreadcrumbItem to="/">
+              <Icon type="ios-home-outline"></Icon> Home
+            </BreadcrumbItem>
+            <BreadcrumbItem to="/components/breadcrumb">
+              <Icon type="logo-buffer"></Icon> 用户管理
+            </BreadcrumbItem>
+          </Breadcrumb>
+        </div>
+          <!--搜索框-->
+        <div class="searchInput" style="padding: 10px 0">
+         <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入名称"></el-input>
+          <button type="button" class="btn btn-outline-success">搜索</button>
+        </div>
+        <div style="margin-left: 0" class="searchInput">
+          <button type="button" class="btn btn-info btn-new">新增
+            <i class="el-icon-circle-plus-outline"></i>
+          </button>
+          <button type="button" class="btn btn-danger btn-delete">批量删除
+            <i class="el-icon-remove-outline"></i>
+          </button>
+          <button type="button" class="btn btn-primary btn-new">导入
+            <i class="el-icon-bottom-left"></i>
+          </button>
+          <button type="button" class="btn btn-primary btn-new">导出
+            <i class="el-icon-top-right"></i>
+          </button>
+        </div>
 
         <el-main>
-          <el-table :data="tableData">
+          <el-table :data="tableData" border stripe style="margin-left: 20px;" >
             <el-table-column prop="date" label="日期" width="140">
             </el-table-column>
             <el-table-column prop="name" label="姓名" width="120">
             </el-table-column>
             <el-table-column prop="address" label="地址">
             </el-table-column>
+
+            <el-table-column prop="operate" label="操作">
+              <template slot-scope="scope">
+                <button type="button" class="btn btn-success btn-operate btn-sm" style="color: white">
+                  编辑 <i class="el-icon-edit"></i>
+                </button>
+                <button type="button" class="btn btn-danger btn-operate btn-sm">
+                  删除 <i class="el-icon-remove-outline"></i>
+                </button>
+
+              </template>
+            </el-table-column>
           </el-table>
+          <!--分页-->
+          <div style="padding: 10px 0">
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage4"
+                :page-sizes="[5, 10, 15, 20]"
+                :page-size="10"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="400">
+            </el-pagination>
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -110,6 +169,7 @@
 </template>
 
 <script>
+import 'animate.css'
 export default {
   name: "Backstage",
   data() {
@@ -148,11 +208,44 @@ export default {
 div{
   margin: 0;
   padding: 0;
-  height: 100%;
+
 }
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+.btn{
+  margin-left: 5px;
+  width: 70px;
+  height: 35px;
+}
+.searchInput{
+  float: left;
+  text-align: left;
+  margin-left: 20px;
+}
+.btn-new{
+  margin-left: 20px;
+  width: 70px;
+  margin-bottom: 10px;
+  height: 35px;
+}
+.btn-delete{
+  margin-left: 20px;
+  width: 90px;
+  margin-bottom: 10px;
+  height: 35px;
+}
+.btn-operate{
+  margin-left: 3px;
+  width: 70px;
+  height: 30px;
+}
+.bread{
+  float: left;
+  margin-left: 20px;
+  font-size: 15px;
+  line-height: 23px;
 }
 </style>
