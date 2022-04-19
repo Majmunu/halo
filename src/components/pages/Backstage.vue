@@ -111,16 +111,32 @@
         </div>
           <!--搜索框-->
         <div class="searchInput" style="padding: 10px 0">
-         <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入名称"></el-input>
-          <button type="button" class="btn btn-outline-success">搜索</button>
+         <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入名称" v-model="username">
+         </el-input>
+          <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入邮箱" v-model="email">
+          </el-input>
+          <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入地址" v-model="address">
+
+          </el-input>
+          <button type="button" class="btn btn-outline-success" @click="load">搜索</button>
+          <button type="button" class="btn btn-outline-warning" @click="reset">重置</button>
         </div>
         <div style="margin-left: 0" class="searchInput">
-          <button type="button" class="btn btn-info btn-new">新增
+          <button type="button" class="btn btn-info btn-new" @click="handleAdd">新增
             <i class="el-icon-circle-plus-outline"></i>
           </button>
-          <button type="button" class="btn btn-danger btn-delete">批量删除
+          <el-popconfirm
+              confirm-button-text='确定'
+              cancel-button-text='不用了'
+              icon="el-icon-info"
+              icon-color="red"
+              title="确定删除吗？"
+              @confirm="delBatch"
+          >
+          <button type="button" class="btn btn-danger btn-delete"  slot="reference">批量删除
             <i class="el-icon-remove-outline"></i>
           </button>
+          </el-popconfirm>
           <button type="button" class="btn btn-primary btn-new">导入
             <i class="el-icon-bottom-left"></i>
           </button>
@@ -129,24 +145,50 @@
           </button>
         </div>
 
+
+
         <el-main>
-          <el-table :data="tableData" border stripe style="margin-left: 20px;" >
-            <el-table-column prop="date" label="日期" width="140">
+          <el-table :data="tableData" border stripe style="margin-left: 20px;"  @selection-change="handleSelectionChange">
+            <el-table-column
+                type="selection"
+                width="55">
             </el-table-column>
-            <el-table-column prop="name" label="姓名" width="120">
+            <el-table-column prop="id" label="id" width="60">
+            </el-table-column>
+            <el-table-column prop="username" label="用户名" width="140">
+            </el-table-column>
+            <el-table-column prop="nickname" label="昵称" width="120">
             </el-table-column>
             <el-table-column prop="address" label="地址">
+            </el-table-column>
+            <el-table-column prop="phone" label="电话">
+            </el-table-column>
+            <el-table-column prop="email" label="邮箱">
             </el-table-column>
 
             <el-table-column prop="operate" label="操作">
               <template slot-scope="scope">
-                <button type="button" class="btn btn-success btn-operate btn-sm" style="color: white">
+                <button type="button"
+                        class="btn btn-success btn-operate btn-sm"
+                        style="color: white"
+                        @click="handleEdit(scope.row)">
                   编辑 <i class="el-icon-edit"></i>
                 </button>
-                <button type="button" class="btn btn-danger btn-operate btn-sm">
+
+                <el-popconfirm
+                    confirm-button-text='确定'
+                    cancel-button-text='不用了'
+                    icon="el-icon-info"
+                    icon-color="red"
+                    title="确定删除吗？"
+                    @confirm="del(scope.row.id)"
+                >
+                <button type="button"
+                        slot="reference"
+                        class="btn btn-danger btn-operate btn-sm">
                   删除 <i class="el-icon-remove-outline"></i>
                 </button>
-
+                </el-popconfirm>
               </template>
             </el-table-column>
           </el-table>
@@ -155,13 +197,42 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage4"
-                :page-sizes="[5, 10, 15, 20]"
-                :page-size="10"
+                :current-page="pageNum"
+                :page-sizes="[2, 5, 10, 20]"
+                :page-size="pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="total">
             </el-pagination>
           </div>
+          <el-card class="box-card">
+          <el-dialog title="用户信息" :visible.sync="dialogFormVisible" width="35%">
+            <el-form label-width="80px" size="small">
+              <el-form-item label="用户名">
+                <el-input v-model="form.username" autocomplete="off"></el-input>
+              </el-form-item>
+
+
+              <el-form-item label="昵称">
+                <el-input v-model="form.nickname" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱">
+                <el-input v-model="form.email" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="电话">
+                <el-input v-model="form.phone" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="地址">
+                <el-input v-model="form.address" autocomplete="off"></el-input>
+              </el-form-item>
+
+
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false" style="width: 70px;height: 30px;float: left">取 消</el-button>
+              <el-button type="primary" @click="save" style="width: 70px;height: 30px">确 定</el-button>
+            </div>
+          </el-dialog>
+          </el-card>
         </el-main>
       </el-container>
     </el-container>
@@ -170,22 +241,33 @@
 
 <script>
 import 'animate.css'
+import request from "@/utils/requset";
 export default {
   name: "Backstage",
   data() {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄'
-    };
+
     return {
-      tableData: Array(10).fill(item),
+      tableData: [],
+      total:0,
+      pageSize:10,
+      pageNum:1,
+      username: "",
+      email:"",
+      address:"",
+      dialogFormVisible:false,
+      form:{},
+      multipleSelection:[],
       collapseBtnclass:'el-icon-s-fold',
       isCollapse:false,
       sideWidth:200,
       logoTextShow:true,
       distance:1130
     }
+  },
+  created() {
+    //请求分页查询数据
+    this.load()
+
   },
   methods:{
     collapse(){ //点击收缩按钮触发
@@ -199,7 +281,102 @@ export default {
         this.collapseBtnclass='el-icon-s-fold'
         this.logoTextShow=true
       }
+    },
+    load(){
+
+      request.get("/user/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          username: this.username,
+          email:this.email,
+          address:this.address
+        }
+      }).then(res=>{
+        this.tableData=res.records
+        this.total=res.total
+      })
+
+    },
+    save(){
+      request.post("/user",this.form).then(res=>{
+        if(res){
+          this.$message({
+            message: '恭喜你，保存成功',
+            type: 'success'
+          });
+          this.dialogFormVisible=false
+          this.load()
+        }else{
+          this.$message({
+            message: '抱歉，保存失败',
+            type: 'warning'
+          });
+        }
+      })
+    },
+    handleSizeChange(pageSize){
+      this.pageSize=pageSize
+      this.load()
+
+    },
+    handleCurrentChange(pageNum){
+      this.pageNum=pageNum
+      this.load()
+
+    },
+    reset(){
+      this.username=""
+      this.email=""
+      this.address=""
+      this.load()
+    },
+    handleAdd(){
+      this.dialogFormVisible=true
+      this.form={}
+    },
+    handleEdit(row){
+      this.form=row
+      this.dialogFormVisible=true
+    },
+    del(id){
+      request.delete("/user/"+id).then(res=>{
+        if(res){
+          this.$message({
+            message: '恭喜你，删除成功',
+            type: 'success'
+          });
+          this.load()
+        }else{
+          this.$message({
+            message: '抱歉，删除失败',
+            type: 'warning'
+          });
+        }
+      })
+    },
+    handleSelectionChange(val){
+        this.multipleSelection=val
+    },
+    delBatch(){
+      let ids=this.multipleSelection.map(v=>v.id)
+      request.post("/user/del/batch",ids).then(res=> {
+        if (res) {
+          this.$message({
+            message: '恭喜你，批量删除成功',
+            type: 'success'
+          });
+          this.load()
+        } else {
+          this.$message({
+            message: '抱歉，批量删除失败',
+            type: 'warning'
+          });
+        }
+      })
     }
+
+
   }
 }
 </script>

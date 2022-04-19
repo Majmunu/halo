@@ -16,8 +16,12 @@ import 'view-design/dist/styles/iview.css';
 import VueRouter from "vue-router"
 //引入路由器
 import router from "@/router"
+import request from "@/utils/requset";
+
+
 //关闭生产提示
 Vue.config.productionTip = false
+Vue.prototype.request=request
 //应用插件
 Vue.use(VueRouter);
 Vue.use(ElementUI);
