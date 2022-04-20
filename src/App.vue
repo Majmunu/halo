@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-<!--    <HaloHeader v-if="$route.path!=='/login'"/>-->
+<!--    <HaloHeader v-if="$route.path!=='/houtai'"/>-->
     <router-view></router-view>
   </div>
 

@@ -16,6 +16,8 @@ import TheArticleDetails from "@/components/pages/level3Page/TheArticleDetails";
 import hotListPage from "@/components/pages/sonHome/hotListPage";
 import login from "@/components/pages/login";
 import Backstage from "@/components/pages/Backstage";
+import UserInterface from "@/components/pages/Backstage/UserInterface";
+import BSHome from "@/components/pages/Backstage/BSHome";
 
 			// 引入VueRouter
 Vue.use(VueRouter)
@@ -108,7 +110,23 @@ export default new VueRouter({
         },
         {
             path:'/houtai',
-            component:Backstage
+            component:Backstage,
+            redirect:'/houtai/home',
+            children:[
+                {
+                path: 'user',
+                name: 'user',
+                    meta: { title: '首页' },
+                component: UserInterface
+                },
+                {
+                    path: 'home',
+                    name: 'home',
+                    meta: { title: '首页' },
+                    component:BSHome
+                }
+            ]
+
         },
         {
             path:'*',
