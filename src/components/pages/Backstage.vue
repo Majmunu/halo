@@ -31,7 +31,7 @@
 
 <script>
 import 'animate.css'
-import request from "@/utils/requset";
+import request from "@/utils/request";
 import Aside from "@/components/pages/Backstage/Aside"
 import BSHeader from "@/components/pages/Backstage/BSHeader";
 export default {

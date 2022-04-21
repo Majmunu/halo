@@ -1,8 +1,10 @@
 <template>
-<div style="margin-top: 45px">
+<div style="margin-top: 15px">
 
   <!--搜索框-->
-  <div class="searchInput" style="padding: 10px 0">
+  <div style="margin:10px 0;display: flex;
+    flex-direction: row; " class="clearfix col-xl-12">
+  <div class="searchInput" style="float: left">
     <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入名称" v-model="username">
     </el-input>
     <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入邮箱" v-model="email">
@@ -13,7 +15,7 @@
     <button type="button" class="btn btn-outline-success" @click="load">搜索</button>
     <button type="button" class="btn btn-outline-warning" @click="reset">重置</button>
   </div>
-  <div style="margin-left: 0" class="searchInput">
+  <div style="margin-top: 50px;position: absolute" class="searchInput ">
     <button type="button" class="btn btn-info btn-new" @click="handleAdd">新增
       <i class="el-icon-circle-plus-outline"></i>
     </button>
@@ -29,23 +31,36 @@
         <i class="el-icon-remove-outline"></i>
       </button>
     </el-popconfirm>
+
+    <el-upload
+        style="display: inline-block"
+        action="http://localhost:9090/user/import"
+        :show-file-list="false"
+        accept="xlsx"
+        :on-success="handleExcelImportSuccess"
+
+        >
     <button type="button" class="btn btn-primary btn-new">导入
       <i class="el-icon-bottom-left"></i>
     </button>
-    <button type="button" class="btn btn-primary btn-new">导出
+    </el-upload>
+
+    <button type="button" class="btn btn-primary btn-new" @click="exp">导出
       <i class="el-icon-top-right"></i>
     </button>
   </div>
-
+  </div>
 
   <el-table
       :data="tableData"
-      border stripe style="margin-left: 20px;"
+      border stripe style="margin-left: 20px;margin-top: 60px"
       @selection-change="handleSelectionChange"
       :header-cell-class-name="headerBg"
+
   >
     <el-table-column
         type="selection"
+
         width="55">
     </el-table-column>
     <el-table-column prop="id" label="id" width="60">
@@ -131,7 +146,7 @@
 </template>
 
 <script>
-import request from "@/utils/requset";
+import request from "@/utils/request";
 
 export default {
   name: "UserInterface",
@@ -253,6 +268,13 @@ export default {
           });
         }
       })
+    },
+    exp(){
+      window.open("http://localhost:9090/user/export")
+    },
+    handleExcelImportSuccess() {
+      this.$message.success("导入成功")
+      this.load()
     }
   }
 }
@@ -292,7 +314,5 @@ export default {
   font-size: 15px;
   line-height: 23px;
 }
-.headerBg{
-  background:  #eee!important;
-}
+
 </style>

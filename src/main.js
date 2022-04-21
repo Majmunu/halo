@@ -16,7 +16,7 @@ import 'view-design/dist/styles/iview.css';
 import VueRouter from "vue-router"
 //引入路由器
 import router from "@/router"
-import request from "@/utils/requset";
+import request from "@/utils/request";
 
 
 //关闭生产提示

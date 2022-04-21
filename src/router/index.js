@@ -18,6 +18,8 @@ import login from "@/components/pages/login";
 import Backstage from "@/components/pages/Backstage";
 import UserInterface from "@/components/pages/Backstage/UserInterface";
 import BSHome from "@/components/pages/Backstage/BSHome";
+import Register from "@/components/pages/Register";
+import Person from "@/components/pages/Person";
 
 			// 引入VueRouter
 Vue.use(VueRouter)
@@ -109,6 +111,11 @@ export default new VueRouter({
 
         },
         {
+            path:'/register',
+            component:Register
+        },
+
+        {
             path:'/houtai',
             component:Backstage,
             redirect:'/houtai/home',
@@ -124,7 +131,12 @@ export default new VueRouter({
                     name: 'home',
                     meta: { title: '首页' },
                     component:BSHome
-                }
+                },
+                {
+                    path:'person',
+                    name:'个人信息',
+                    component:Person
+                },
             ]
 
         },

@@ -14,11 +14,18 @@
 
     </div>
     <el-dropdown style="width: 170px;cursor: pointer;">
-      <span>???{{  }}</span>
+      <div style="display: inline-block">
+
+          <el-avatar size="medium" :src="user.avatarUrl" style="position: relative;top: 10px;right: 5px"></el-avatar>
+
+      <span>{{ user.nickname }}</span>
       <i class="el-icon-arrow-down" style="margin-left: 5px"></i>
+      </div>
       <el-dropdown-menu slot="dropdown" style="margin-right: 50px;width: 100px;text-align: center">
-        <el-dropdown-item>个人信息</el-dropdown-item>
-        <el-dropdown-item>退出</el-dropdown-item>
+        <el-dropdown-item>
+          <router-link to="/houtai/person">个人信息</router-link>
+        </el-dropdown-item>
+        <el-dropdown-item to="/login"><span @click="logout">退出</span></el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -34,12 +41,18 @@ export default {
   },
   data(){
     return{
-      paths:[]
+      paths:[],
+      user:localStorage.getItem("user") ?JSON.parse(localStorage.getItem("user")) :{}
     }
   },
   methods:{
     collapse(){
       this.$emit("asideCollapse")
+    },
+    logout(){
+      this.$router.push("/login")
+      localStorage.removeItem("user")
+      this.$message.success("退出成功")
     }
 
   }
