@@ -51,7 +51,7 @@ export default {
   methods:{
     save(){
       request.post("/user",this.form).then(res=>{
-        if(res){
+        if(res.data){
           this.$message({
             message: '恭喜你，保存成功',
             type: 'success'
