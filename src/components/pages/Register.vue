@@ -60,15 +60,15 @@ export default {
       ruleValidate: {
         username: [
           { required: true, message: '用户名不能为空', trigger: 'blur' },
-          { type: 'string', min: 1,max: 20, message: '超出长度限制,请检查您的输入', trigger: 'blur' },
+          { type: 'string', min: 1,max: 32, message: '超出长度限制,请检查您的输入', trigger: 'blur' },
         ],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' },
-          { type: 'string', min: 1,max: 16, message: '超出长度限制,请检查您的输入', trigger: 'blur' },
+          { type: 'string', min: 6,max: 32, message: '密码的长度必须是 6-32 位', trigger: 'blur' },
         ],
         confirmPassword: [
           { required: true, message: '密码不能为空', trigger: 'blur' },
-          { type: 'string', min: 1,max: 16, message: '超出长度限制,请检查您的输入', trigger: 'blur' },
+          { type: 'string', min: 6,max: 32, message: '密码的长度必须是 6-32 位', trigger: 'blur' },
         ],
 
       }

@@ -42,10 +42,27 @@
               </div>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0">
+          <form class="form-inline my-2 my-lg-0" >
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">注册登录</button>
+            <button   class="btn btn-outline-success my-2 my-sm-0" type="submit" v-if="!user.username" @click="login">
+              注册登录
+            </button>
           </form>
+          <el-dropdown style="width: 170px;cursor: pointer;padding-bottom: 20px" v-if="user.username">
+            <div style="display: inline-block">
+
+              <el-avatar size="medium" :src="user.avatarUrl" style="position: relative;top: 10px;right: 5px"></el-avatar>
+
+              <span>{{ user.nickname }}</span>
+              <i class="el-icon-arrow-down" style="margin-left: 5px"></i>
+            </div>
+            <el-dropdown-menu slot="dropdown" style="margin-right: 50px;width: 100px;text-align: center">
+              <el-dropdown-item>
+                <router-link to="/houtai/person">个人信息</router-link>
+              </el-dropdown-item>
+              <el-dropdown-item to="/login"><span @click="logout">退出</span></el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </nav>
 
@@ -74,7 +91,21 @@ export default {
         {id:'004',name:'排行榜',address:'/paihangbang'},
 
       ],
+      paths:[],
+      user:localStorage.getItem("user") ?JSON.parse(localStorage.getItem("user")) :{}
 
+    }
+  },
+  methods:{
+    logout(){
+      this.$router.push("/login")
+      localStorage.removeItem("user")
+      this.$message.success("退出成功")
+    },
+    login(){
+      this.$router.push({
+        name:'login'
+      })
     }
   }
 }
@@ -100,5 +131,8 @@ export default {
 .nav-link:visited{
   color: #049861;
 }
-
+a{
+  text-decoration: none;
+  list-style: none;
+}
 </style>

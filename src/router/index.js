@@ -20,6 +20,7 @@ import UserInterface from "@/components/pages/Backstage/UserInterface";
 import BSHome from "@/components/pages/Backstage/BSHome";
 import Register from "@/components/pages/Register";
 import Person from "@/components/pages/Person";
+import file from "@/components/pages/File";
 
 			// 引入VueRouter
 Vue.use(VueRouter)
@@ -30,17 +31,20 @@ export default new VueRouter({
         {
             path:"/wenda",
             component:QuestionsAndAnswers,
+            meta:{keepAlive:true},
             redirect:"/wenda/home",
             children:[
                 {
                     name:"question",
                     path: "/wenda/question",
-                    component: questionAndAnswerPage
+                    component: questionAndAnswerPage,
+                    meta:{keepAlive:true},
                 },
                 {
                     name:'qahome',
                     path:"/wenda/home",
-                    component:QASubpage
+                    component:QASubpage,
+                    meta:{keepAlive:true},
                 },
 
 
@@ -49,17 +53,20 @@ export default new VueRouter({
         {
             path:"/rebang",
             component:HotList,
+            meta:{keepAlive:true},
             redirect:'/rebang/home',
             children:[
                 {
                     name:'tiezi',
                     path: '/rebang/tiezi',
-                    component: TheArticleDetails
+                    component: TheArticleDetails,
+                    meta:{keepAlive:true},
                 },
                 {
                     name:'rbhome',
                     path:'/rebang/home',
-                    component: hotListPage
+                    component: hotListPage,
+                    meta:{keepAlive:true},
                 },
 
             ]
@@ -67,58 +74,71 @@ export default new VueRouter({
         },
         {
             path:"/huati",
-            component:Topics
+            component:Topics,
+            meta:{keepAlive:true},
         },
         {
             path:"/shuma",
-            component:Digital
+            component:Digital,
+            meta:{keepAlive:true},
         },
         {
             path:"/home",
-            component:HaloHome
+            component:HaloHome,
+            meta:{keepAlive:true},
         },
         {
             path:"/jiaocheng",
             component:Course,
+            meta:{keepAlive:true},
             children:[
                 {
                     name:'jchome',
                     path:'/jiaocheng/jchome',
-                    component:CourseHome
+                    component:CourseHome,
+                    meta:{keepAlive:true},
                 },
                 {
                     path:'/jiaocheng',
-                    redirect:"/jiaocheng/jchome"
+                    redirect:"/jiaocheng/jchome",
+                    meta:{keepAlive:true},
                 }
 
             ]
         },
         {
             path:"/zhibo",
-            component:LIVE
+            component:LIVE,
+            meta:{keepAlive:true},
         },
         {
             path:"/zhongce",
-            component:publicTest
+            component:publicTest,
+            meta:{keepAlive:true},
         },
         {
             path:"/paihangbang",
-            component:RankingList
+            component:RankingList,
+            meta:{keepAlive:true},
         },
         {
             path:'/login',
-            component:login
+            name:'login',
+            component:login,
+            meta:{keepAlive:false},
 
         },
         {
             path:'/register',
-            component:Register
+            component:Register,
+            meta:{keepAlive:false}
         },
 
         {
             path:'/houtai',
             component:Backstage,
             redirect:'/houtai/home',
+            meta:{keepAlive:false},
             children:[
                 {
                 path: 'user',
@@ -137,6 +157,11 @@ export default new VueRouter({
                     name:'个人信息',
                     component:Person
                 },
+                {
+                    path:'file',
+                    name:"文件管理",
+                    component: file
+                }
             ]
 
         },

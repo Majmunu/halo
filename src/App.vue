@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-<!--    <HaloHeader v-if="$route.path!=='/houtai'"/>-->
+    <HaloHeader  v-if="$route.meta.keepAlive"/>
     <router-view></router-view>
   </div>
 

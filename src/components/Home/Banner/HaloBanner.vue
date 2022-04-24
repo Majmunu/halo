@@ -6,6 +6,7 @@
       <h1 class="display-4">{{BannerTitle}}</h1>
       <p class="lead">{{BannerText}}</p>
       <router-link
+          v-if="!user.username"
           to="/login"
           class="btn btn-success btn-lg"
           href="#" role="button"
@@ -26,11 +27,13 @@ export default {
   },
   data(){
     return{
+
       BannerTitle:'玩数码，上？？？？',
       BannerText:'科技资讯，新鲜评测，真实体验，玩机宝典，你想要的这里全都有。',
       BannerButton:'注册登录',
       fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
       url: 'public/HmoeBanner.png',
+      user:localStorage.getItem("user") ?JSON.parse(localStorage.getItem("user")) :{}
 
     }
 
