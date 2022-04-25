@@ -6,7 +6,7 @@
       <el-button type="warning" @click="reset">重置</el-button>
     </div>
     <div style="margin: 10px 0">
-      <el-upload :action="'http://' + serverIp + ':9090/file/upload'" :show-file-list="false"
+      <el-upload action="http://localhost:9090/file/upload" :show-file-list="false"
                  :on-success="handleFileUploadSuccess" style="display: inline-block">
         <el-button type="primary" class="ml-5">上传文件 <i class="el-icon-top"></i></el-button>
       </el-upload>
@@ -79,8 +79,109 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+
 export default {
-  name: "File"
+  name: "File",
+  data(){
+    return {
+
+      tableData:[],
+      name:'',
+      multipleSelection:[],
+      pageSize:10,
+      pageNum:1,
+      total:0,
+    }
+  },
+  created() {
+    this.load()
+  },
+  methods:{
+    load(){
+
+      request.get("/file/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+           name: this.name,
+        }
+      }).then(res=>{
+        this.tableData=res.data.records
+        this.total=res.data.total
+      })
+
+    },
+    handleSizeChange(pageSize){
+      this.pageSize=pageSize
+      this.load()
+
+    },
+    handleCurrentChange(pageNum){
+      this.pageNum=pageNum
+      this.load()
+
+    },
+    reset(){
+      this.name=""
+      this.load()
+    },
+    del(id){
+      request.delete("/file/"+id).then(res=>{
+        if(res.code === '200'){
+          this.$message({
+            message: '恭喜你，删除成功',
+            type: 'success'
+          });
+          this.load()
+        }else{
+          this.$message({
+            message: '抱歉，删除失败',
+            type: 'warning'
+          });
+        }
+      })
+    },
+    changeEnable(row) {
+      this.request.post("/file/update", row).then(res => {
+        if (res.code === '200') {
+          this.$message.success("操作成功")
+        }
+      })
+    },
+    handleSelectionChange(val){
+      this.multipleSelection=val
+    },
+    delBatch(){
+      let ids=this.multipleSelection.map(v=>v.id)
+      request.post("/file/del/batch",ids).then(res=> {
+        if (res.code === '200') {
+          this.$message({
+            message: '恭喜你，批量删除成功',
+            type: 'success'
+          });
+          this.load()
+        } else {
+          this.$message({
+            message: '抱歉，批量删除失败',
+            type: 'warning'
+          });
+        }
+      })
+    },
+    handleFileUploadSuccess(res) {
+      console.log(res)
+      this.$message.success("上传成功")
+      this.load()
+    },
+    download(url) {
+      window.open(url)
+    },
+    preview(url) {
+      window.open('https://file.keking.cn/onlinePreview?url=' + encodeURIComponent(window.btoa((url))))
+    },
+
+  }
 }
 </script>
 

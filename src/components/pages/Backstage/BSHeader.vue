@@ -36,13 +36,13 @@ export default {
   name: "BSHeader",
   props:{
     collapseBtnclass:String,
+    user:Object
 
 
   },
   data(){
     return{
       paths:[],
-      user:localStorage.getItem("user") ?JSON.parse(localStorage.getItem("user")) :{}
     }
   },
   methods:{

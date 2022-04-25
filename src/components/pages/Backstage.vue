@@ -15,14 +15,14 @@
         <el-header style="font-size: 12px;
             border-bottom: 1px solid #cccccc;">
           <!--          收缩按钮-->
-          <BSHeader :collapseBtnclass="collapseBtnclass" @asideCollapse="collapse"/>
+          <BSHeader :collapseBtnclass="collapseBtnclass" @asideCollapse="collapse" :user="user"/>
 
 
         </el-header>
 
 
         <el-main>
-          <router-view></router-view>
+          <router-view @refreshUser="getUser"></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -58,10 +58,13 @@ export default {
       isCollapse:false,
       sideWidth:200,
       logoTextShow:true,
-      distance:1130
+      distance:1130,
+      user:{}
     }
   },
-
+  created() {
+    this.getUser()
+  },
   methods:{
     collapse(){ //点击收缩按钮触发
       this.isCollapse=!this.isCollapse
@@ -75,6 +78,13 @@ export default {
         this.logoTextShow=true
       }
     },
+    getUser(){
+      let username=localStorage.getItem("user") ?JSON.parse(localStorage.getItem("user")).username:""
+      this.request.get("/user/username/" + username).then(res=>{
+        this.user=res.data
+      })
+
+    }
 
   }
 }
