@@ -5,12 +5,7 @@
   <div style="margin:10px 0;display: flex;
     flex-direction: row; " class="clearfix col-xl-12">
   <div class="searchInput" style="float: left">
-    <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入名称" v-model="username">
-    </el-input>
-    <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入邮箱" v-model="email">
-    </el-input>
-    <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入地址" v-model="address">
-
+    <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入名称" v-model="name">
     </el-input>
     <button type="button" class="btn btn-outline-success" @click="load">搜索</button>
     <button type="button" class="btn btn-outline-warning" @click="reset">重置</button>
@@ -37,17 +32,8 @@
         action="http://localhost:9090/user/import"
         :show-file-list="false"
         accept="xlsx"
-        :on-success="handleExcelImportSuccess"
-
-        >
-    <button type="button" class="btn btn-primary btn-new">导入
-      <i class="el-icon-bottom-left"></i>
-    </button>
+        :on-success="handleExcelImportSuccess">
     </el-upload>
-
-    <button type="button" class="btn btn-primary btn-new" @click="exp">导出
-      <i class="el-icon-top-right"></i>
-    </button>
   </div>
   </div>
 
@@ -63,21 +49,22 @@
 
         width="55">
     </el-table-column>
-    <el-table-column prop="id" label="id" width="60">
+    <el-table-column prop="id" label="id" width="80px">
     </el-table-column>
-    <el-table-column prop="username" label="用户名" width="140">
+    <el-table-column prop="name" label="名称" >
     </el-table-column>
-    <el-table-column prop="nickname" label="昵称" width="120">
+    <el-table-column prop="description" label="描述">
     </el-table-column>
-    <el-table-column prop="address" label="地址">
-    </el-table-column>
-    <el-table-column prop="phone" label="电话">
-    </el-table-column>
-    <el-table-column prop="email" label="邮箱">
-    </el-table-column>
+
 
     <el-table-column prop="operate" label="操作">
       <template slot-scope="scope">
+        <button type="button"
+                class="btn btn-secondary btn-operate btn-sm"
+                style="color: white;width: 100px"
+                @click="selectMenu(scope.row.id)">
+          分配菜单 <i class="el-icon-menu"></i>
+        </button>
         <button type="button"
                 class="btn btn-success btn-operate btn-sm"
                 style="color: white"
@@ -115,24 +102,15 @@
     </el-pagination>
   </div>
 
-  <el-dialog title="用户信息" :visible.sync="dialogFormVisible" width="35%">
+  <el-dialog title="角色信息" :visible.sync="dialogFormVisible" width="35%">
     <el-form label-width="80px" size="small">
-      <el-form-item label="用户名">
-        <el-input v-model="form.username" autocomplete="off"></el-input>
+      <el-form-item label="名称">
+        <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
 
 
-      <el-form-item label="昵称">
-        <el-input v-model="form.nickname" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="邮箱">
-        <el-input v-model="form.email" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="电话">
-        <el-input v-model="form.phone" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="地址">
-        <el-input v-model="form.address" autocomplete="off"></el-input>
+      <el-form-item label="描述">
+        <el-input v-model="form.description" autocomplete="off"></el-input>
       </el-form-item>
 
 
@@ -142,6 +120,25 @@
       <el-button type="primary" @click="save" style="width: 70px;height: 30px">确 定</el-button>
     </div>
   </el-dialog>
+
+
+  <el-dialog title="菜单分配" :visible.sync="MenuDialogVis" width="35%">
+    <el-tree
+
+        :data="menuData"
+        node-key="id"
+        :default-expanded-keys="[1, 3]"
+        :default-checked-keys="[4]"
+        show-checkbox
+        @check-change="handleCheckChange">
+    </el-tree>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="MenuDialogVis = false" style="width: 70px;height: 30px;float: left">取 消</el-button>
+      <el-button type="primary" @click="save" style="width: 70px;height: 30px">确 定</el-button>
+    </div>
+  </el-dialog>
+
+
 </div>
 </template>
 
@@ -149,16 +146,15 @@
 import request from "@/utils/request";
 
 export default {
-  name: "UserInterface",
+  name: "RoleInterface",
   data(){
     return{
       tableData: [],
       total:0,
       pageSize:10,
       pageNum:1,
-      username: "",
-      email:"",
-      address:"",
+      name: "",
+      MenuDialogVis:false,
       dialogFormVisible:false,
       form:{},
       multipleSelection:[],
@@ -167,7 +163,35 @@ export default {
       sideWidth:200,
       logoTextShow:true,
       distance:1130,
-      headerBg:'headerBg'
+      headerBg:'headerBg',
+      menuData:[
+        {
+          id: 1,
+          label: '主页',
+          children: []
+        },
+        {
+          id: 2,
+          label: '系统管理',
+          children: [
+            {
+              id: 3,
+              label: '用户管理',
+            },
+            {
+              id: 4,
+              label: '角色管理',
+            },
+            {
+              id: 5,
+              label: '菜单管理',
+            },
+              {
+            id: 6,
+            label: '文件管理',
+          }]
+        }
+      ]
     }
   },
   created() {
@@ -178,13 +202,12 @@ export default {
   methods:{
     load(){
 
-      request.get("/user/page", {
+      request.get("/role/page", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
-          username: this.username,
-          email:this.email,
-          address:this.address
+          name: this.name,
+
         }
       }).then(res=>{
         this.tableData=res.data.records
@@ -193,7 +216,7 @@ export default {
 
     },
     save(){
-      request.post("/user",this.form).then(res=>{
+      request.post("/role",this.form).then(res=>{
         if(res.code==='200'){
           this.$message({
             message: '恭喜你，保存成功',
@@ -219,10 +242,11 @@ export default {
       this.load()
 
     },
+    handleCheckChange(data, checked, indeterminate) {
+      console.log(data, checked, indeterminate);
+    },
     reset(){
-      this.username=""
-      this.email=""
-      this.address=""
+      this.name=""
       this.load()
     },
     handleAdd(){
@@ -234,7 +258,7 @@ export default {
       this.dialogFormVisible=true
     },
     del(id){
-      request.delete("/user/"+id).then(res=>{
+      request.delete("/role/"+id).then(res=>{
         if(res.code==='200'){
           this.$message({
             message: '恭喜你，删除成功',
@@ -254,7 +278,7 @@ export default {
     },
     delBatch(){
       let ids=this.multipleSelection.map(v=>v.id)
-      request.post("/user/del/batch",ids).then(res=> {
+      request.post("/role/del/batch",ids).then(res=> {
         if (res.code==='200') {
           this.$message({
             message: '恭喜你，批量删除成功',
@@ -269,12 +293,8 @@ export default {
         }
       })
     },
-    exp(){
-      window.open("http://localhost:9090/user/export")
-    },
-    handleExcelImportSuccess() {
-      this.$message.success("导入成功")
-      this.load()
+    selectMenu(roleId){
+      this.MenuDialogVis=true
     }
   }
 }

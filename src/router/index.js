@@ -21,6 +21,8 @@ import BSHome from "@/components/pages/Backstage/BSHome";
 import Register from "@/components/pages/Register";
 import Person from "@/components/pages/Person";
 import file from "@/components/pages/File";
+import RoleInterface from "@/components/pages/Backstage/RoleInterface";
+import MenuInterface from "@/components/pages/Backstage/MenuInterface";
 
 			// 引入VueRouter
 Vue.use(VueRouter)
@@ -161,6 +163,16 @@ export default new VueRouter({
                     path:'file',
                     name:"文件管理",
                     component: file
+                },
+                {
+                    path:'role',
+                    name:'角色管理',
+                    component: RoleInterface
+                },
+                {
+                    path: 'menu',
+                    name: '菜单管理',
+                    component: MenuInterface
                 }
             ]
 
