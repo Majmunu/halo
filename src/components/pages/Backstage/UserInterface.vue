@@ -65,6 +65,17 @@
     </el-table-column>
     <el-table-column prop="id" label="id" width="60">
     </el-table-column>
+
+    <el-table-column prop="role" label="角色">
+      <template slot-scope="scope">
+        <el-tag type="primary" v-if="scope.row.role === 'ROLE_ADMIN'">管理员</el-tag>
+        <el-tag type="warning" v-if="scope.row.role === 'ROLE_USER'">普通用户</el-tag>
+
+      </template>
+    </el-table-column>
+
+
+
     <el-table-column prop="username" label="用户名" width="140">
     </el-table-column>
     <el-table-column prop="nickname" label="昵称" width="120">
@@ -76,8 +87,11 @@
     <el-table-column prop="email" label="邮箱">
     </el-table-column>
 
-    <el-table-column prop="operate" label="操作">
+    <el-table-column prop="operate" label="操作" width="300px">
       <template slot-scope="scope">
+
+
+
         <button type="button"
                 class="btn btn-success btn-operate btn-sm"
                 style="color: white"
@@ -119,6 +133,12 @@
     <el-form label-width="80px" size="small">
       <el-form-item label="用户名">
         <el-input v-model="form.username" autocomplete="off"></el-input>
+      </el-form-item>
+
+      <el-form-item label="角色">
+        <el-select clearable v-model="form.role" placeholder="请选择角色" style="width: 100%">
+          <el-option v-for="item in roles" :key="item.name" :label="item.name" :value="item.flag"></el-option>
+        </el-select>
       </el-form-item>
 
 
@@ -167,7 +187,8 @@ export default {
       sideWidth:200,
       logoTextShow:true,
       distance:1130,
-      headerBg:'headerBg'
+      headerBg:'headerBg',
+      roles:[]
     }
   },
   created() {
@@ -189,6 +210,9 @@ export default {
       }).then(res=>{
         this.tableData=res.data.records
         this.total=res.data.total
+      })
+      this.request.get("/role").then(res => {
+        this.roles = res.data
       })
 
     },
@@ -228,6 +252,7 @@ export default {
     handleAdd(){
       this.dialogFormVisible=true
       this.form={}
+
     },
     handleEdit(row){
       this.form=row

@@ -43,6 +43,7 @@
       @selection-change="handleSelectionChange"
       :header-cell-class-name="headerBg"
 
+
   >
     <el-table-column
         type="selection"
@@ -53,6 +54,10 @@
     </el-table-column>
     <el-table-column prop="name" label="名称" >
     </el-table-column>
+
+    <el-table-column prop="flag" label="唯一标识" >
+    </el-table-column>
+
     <el-table-column prop="description" label="描述">
     </el-table-column>
 
@@ -108,6 +113,10 @@
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
 
+      <el-form-item label="唯一标识">
+        <el-input v-model="form.flag" autocomplete="off"></el-input>
+      </el-form-item>
+
 
       <el-form-item label="描述">
         <el-input v-model="form.description" autocomplete="off"></el-input>
@@ -127,14 +136,20 @@
 
         :data="menuData"
         node-key="id"
-        :default-expanded-keys="[1, 3]"
-        :default-checked-keys="[4]"
+        :default-expanded-keys="expends"
+        :default-checked-keys="checks"
         show-checkbox
-        @check-change="handleCheckChange">
+        :props="props"
+        ref="tree"
+        >
+       <span class="custom-tree-node" slot-scope="{ node, data }">
+        <span><i :class="data.icon"></i> {{ data.name }}</span>
+       </span>
+
     </el-tree>
     <div slot="footer" class="dialog-footer">
       <el-button @click="MenuDialogVis = false" style="width: 70px;height: 30px;float: left">取 消</el-button>
-      <el-button type="primary" @click="save" style="width: 70px;height: 30px">确 定</el-button>
+      <el-button type="primary" @click="saveRoleMenu" style="width: 70px;height: 30px">确 定</el-button>
     </div>
   </el-dialog>
 
@@ -164,34 +179,14 @@ export default {
       logoTextShow:true,
       distance:1130,
       headerBg:'headerBg',
-      menuData:[
-        {
-          id: 1,
-          label: '主页',
-          children: []
-        },
-        {
-          id: 2,
-          label: '系统管理',
-          children: [
-            {
-              id: 3,
-              label: '用户管理',
-            },
-            {
-              id: 4,
-              label: '角色管理',
-            },
-            {
-              id: 5,
-              label: '菜单管理',
-            },
-              {
-            id: 6,
-            label: '文件管理',
-          }]
-        }
-      ]
+      menuData:[],
+      expends: [],
+      checks: [],
+      props:{
+        label: 'name',
+
+      },
+      roleId:0
     }
   },
   created() {
@@ -214,7 +209,10 @@ export default {
         this.total=res.data.total
       })
 
+
+
     },
+
     save(){
       request.post("/role",this.form).then(res=>{
         if(res.code==='200'){
@@ -232,6 +230,17 @@ export default {
         }
       })
     },
+    saveRoleMenu(){
+      request.post("/role/roleMenu/"+this.roleId,this.$refs.tree.getCheckedKeys()).then(res=> {
+       if(res.code==='200'){
+         this.$message.success("绑定成功")
+         this.MenuDialogVis = false
+       }else {
+         this.$message.error(res.msg)
+       }
+      })
+
+    },
     handleSizeChange(pageSize){
       this.pageSize=pageSize
       this.load()
@@ -241,9 +250,6 @@ export default {
       this.pageNum=pageNum
       this.load()
 
-    },
-    handleCheckChange(data, checked, indeterminate) {
-      console.log(data, checked, indeterminate);
     },
     reset(){
       this.name=""
@@ -295,6 +301,20 @@ export default {
     },
     selectMenu(roleId){
       this.MenuDialogVis=true
+      this.roleId=roleId
+      //请求菜单数据
+      request.get("/menu", {
+
+      }).then(res=>{
+        this.menuData=res.data
+      // 把后台返回的菜单数据处理成 id数组
+        this.expends = this.menuData.map(v => v.id)
+      })
+
+      request.get("/role/roleMenu/"+roleId, {
+      }).then(res=>{
+        this.checks = res.data
+      })
     }
   }
 }
