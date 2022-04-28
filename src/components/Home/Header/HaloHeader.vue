@@ -58,7 +58,10 @@
             </div>
             <el-dropdown-menu slot="dropdown" style="margin-right: 50px;width: 100px;text-align: center">
               <el-dropdown-item>
-                <router-link to="/houtai/person">个人信息</router-link>
+                <router-link to="/person">个人信息</router-link>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <router-link to="/password">修改密码</router-link>
               </el-dropdown-item>
               <el-dropdown-item to="/login"><span @click="logout">退出</span></el-dropdown-item>
             </el-dropdown-menu>

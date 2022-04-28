@@ -23,15 +23,20 @@
       </div>
       <el-dropdown-menu slot="dropdown" style="margin-right: 50px;width: 100px;text-align: center">
         <el-dropdown-item>
-          <router-link to="/houtai/person">个人信息</router-link>
+          <router-link to="/person">个人信息</router-link>
         </el-dropdown-item>
-        <el-dropdown-item to="/login"><span @click="logout">退出</span></el-dropdown-item>
+        <el-dropdown-item>
+          <router-link to="/password">修改密码</router-link>
+        </el-dropdown-item>
+        <el-dropdown-item to="/login"><span @click="logout"><router-link to="/login">退出</router-link></span></el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
 </template>
 
 <script>
+import {resetRouter} from "@/router";
+
 export default {
   name: "BSHeader",
   props:{
@@ -50,6 +55,10 @@ export default {
       this.$emit("asideCollapse")
     },
     logout(){
+      localStorage.removeItem("user")
+      localStorage.removeItem("menus")
+      // 重置路由
+      resetRouter()
       this.$router.push("/login")
       localStorage.removeItem("user")
       this.$message.success("退出成功")

@@ -11,7 +11,7 @@
     <button type="button" class="btn btn-outline-warning" @click="reset">重置</button>
   </div>
   <div style="margin-top: 50px;position: absolute" class="searchInput ">
-    <button type="button" class="btn btn-info btn-new" @click="handleAdd">新增
+    <button type="button" class="btn btn-info btn-new" @click="handleAdd(null)">新增
       <i class="el-icon-circle-plus-outline"></i>
     </button>
     <el-popconfirm
@@ -42,8 +42,8 @@
       border stripe style="margin-left: 20px;margin-top: 60px"
       @selection-change="handleSelectionChange"
       :header-cell-class-name="headerBg"
-
-
+      row-key="id"
+      default-expand-all
   >
     <el-table-column
         type="selection"
@@ -54,21 +54,29 @@
     </el-table-column>
     <el-table-column prop="name" label="名称" >
     </el-table-column>
-
-    <el-table-column prop="flag" label="唯一标识" >
+    <el-table-column prop="path" label="路径">
     </el-table-column>
+    <el-table-column prop="pagePath" label="页面路径">
+    </el-table-column>
+    <el-table-column  label="图标" class-name="fontSize18" align="center" label-class-name="fontSize12">
 
+      <template slot-scope="scope">
+        <span :class="scope.row.icon"/>
+      </template>
+
+    </el-table-column>
     <el-table-column prop="description" label="描述">
     </el-table-column>
 
 
-    <el-table-column prop="operate" label="操作">
+    <el-table-column prop="operate" label="操作" width="300px">
       <template slot-scope="scope">
         <button type="button"
-                class="btn btn-secondary btn-operate btn-sm"
+                v-if="!scope.row.pid&&!scope.row.path"
+                class="btn btn-primary btn-operate btn-sm"
                 style="color: white;width: 100px"
-                @click="selectMenu(scope.row.id)">
-          分配菜单 <i class="el-icon-menu"></i>
+                @click="handleAdd(scope.row.id)">
+          新增子菜单 <i class="el-icon-plus"></i>
         </button>
         <button type="button"
                 class="btn btn-success btn-operate btn-sm"
@@ -94,29 +102,33 @@
       </template>
     </el-table-column>
   </el-table>
-  <!--分页-->
-  <div style="padding: 10px 0">
-    <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pageNum"
-        :page-sizes="[2, 5, 10, 20]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total">
-    </el-pagination>
-  </div>
 
-  <el-dialog title="角色信息" :visible.sync="dialogFormVisible" width="35%">
+
+  <el-dialog title="菜单信息" :visible.sync="dialogFormVisible" width="35%">
     <el-form label-width="80px" size="small">
       <el-form-item label="名称">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="唯一标识">
-        <el-input v-model="form.flag" autocomplete="off"></el-input>
+
+      <el-form-item label="路径">
+        <el-input v-model="form.path" autocomplete="off"></el-input>
       </el-form-item>
 
+      <el-form-item label="页面路径">
+        <el-input v-model="form.pagePath" autocomplete="off"></el-input>
+      </el-form-item>
+
+      <el-form-item label="图标">
+<!--        <el-input v-model="form.icon" autocomplete="off"></el-input>-->
+
+        <el-select clearable v-model="form.icon" placeholder="请选择" style="width: 100%">
+          <el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.value">
+            <i :class="item.value" /> {{ item.name }}
+          </el-option>
+        </el-select>
+
+      </el-form-item>
 
       <el-form-item label="描述">
         <el-input v-model="form.description" autocomplete="off"></el-input>
@@ -130,30 +142,6 @@
     </div>
   </el-dialog>
 
-
-  <el-dialog title="菜单分配" :visible.sync="MenuDialogVis" width="35%">
-    <el-tree
-
-        :data="menuData"
-        node-key="id"
-        :default-expanded-keys="expends"
-        :default-checked-keys="checks"
-        show-checkbox
-        :props="props"
-        ref="tree"
-        >
-       <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span><i :class="data.icon"></i> {{ data.name }}</span>
-       </span>
-
-    </el-tree>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="MenuDialogVis = false" style="width: 70px;height: 30px;float: left">取 消</el-button>
-      <el-button type="primary" @click="saveRoleMenu" style="width: 70px;height: 30px">确 定</el-button>
-    </div>
-  </el-dialog>
-
-
 </div>
 </template>
 
@@ -161,7 +149,7 @@
 import request from "@/utils/request";
 
 export default {
-  name: "RoleInterface",
+  name: "MenuInterface",
   data(){
     return{
       tableData: [],
@@ -169,7 +157,6 @@ export default {
       pageSize:10,
       pageNum:1,
       name: "",
-      MenuDialogVis:false,
       dialogFormVisible:false,
       form:{},
       multipleSelection:[],
@@ -179,14 +166,7 @@ export default {
       logoTextShow:true,
       distance:1130,
       headerBg:'headerBg',
-      menuData:[],
-      expends: [],
-      checks: [],
-      props:{
-        label: 'name',
-
-      },
-      roleId:0
+      options:[]
     }
   },
   created() {
@@ -197,24 +177,20 @@ export default {
   methods:{
     load(){
 
-      request.get("/role/page", {
+      request.get("/menu", {
         params: {
-          pageNum: this.pageNum,
-          pageSize: this.pageSize,
+
           name: this.name,
 
         }
       }).then(res=>{
-        this.tableData=res.data.records
-        this.total=res.data.total
+        this.tableData=res.data
+
       })
 
-
-
     },
-
     save(){
-      request.post("/role",this.form).then(res=>{
+      request.post("/menu",this.form).then(res=>{
         if(res.code==='200'){
           this.$message({
             message: '恭喜你，保存成功',
@@ -230,17 +206,6 @@ export default {
         }
       })
     },
-    saveRoleMenu(){
-      request.post("/role/roleMenu/"+this.roleId,this.$refs.tree.getCheckedKeys()).then(res=> {
-       if(res.code==='200'){
-         this.$message.success("绑定成功")
-         this.MenuDialogVis = false
-       }else {
-         this.$message.error(res.msg)
-       }
-      })
-
-    },
     handleSizeChange(pageSize){
       this.pageSize=pageSize
       this.load()
@@ -255,16 +220,24 @@ export default {
       this.name=""
       this.load()
     },
-    handleAdd(){
+    handleAdd(pid){
       this.dialogFormVisible=true
       this.form={}
+      if(pid){
+        this.form.pid=pid
+      }
+
     },
     handleEdit(row){
       this.form=row
       this.dialogFormVisible=true
+      //请求图标数据
+      request.get("/menu/icons").then(res=>{
+        this.options=res.data;
+      })
     },
     del(id){
-      request.delete("/role/"+id).then(res=>{
+      request.delete("/menu/"+id).then(res=>{
         if(res.code==='200'){
           this.$message({
             message: '恭喜你，删除成功',
@@ -284,7 +257,7 @@ export default {
     },
     delBatch(){
       let ids=this.multipleSelection.map(v=>v.id)
-      request.post("/role/del/batch",ids).then(res=> {
+      request.post("/menu/del/batch",ids).then(res=> {
         if (res.code==='200') {
           this.$message({
             message: '恭喜你，批量删除成功',
@@ -299,22 +272,12 @@ export default {
         }
       })
     },
-    selectMenu(roleId){
-      this.MenuDialogVis=true
-      this.roleId=roleId
-      //请求菜单数据
-      request.get("/menu", {
-
-      }).then(res=>{
-        this.menuData=res.data
-      // 把后台返回的菜单数据处理成 id数组
-        this.expends = this.menuData.map(v => v.id)
-      })
-
-      request.get("/role/roleMenu/"+roleId, {
-      }).then(res=>{
-        this.checks = res.data
-      })
+    exp(){
+      window.open("http://localhost:9090/menu/export")
+    },
+    handleExcelImportSuccess() {
+      this.$message.success("导入成功")
+      this.load()
     }
   }
 }
@@ -354,5 +317,13 @@ export default {
   font-size: 15px;
   line-height: 23px;
 }
-
+.headerBg {
+  background: #eee!important;
+}
+.fontSize18{
+  font-size: 28px;
+}
+.fontSize12{
+  font-size: 12px;
+}
 </style>

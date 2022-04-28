@@ -16,172 +16,214 @@ import TheArticleDetails from "@/components/pages/level3Page/TheArticleDetails";
 import hotListPage from "@/components/pages/sonHome/hotListPage";
 import login from "@/components/pages/login";
 import Backstage from "@/components/pages/Backstage";
-import UserInterface from "@/components/pages/Backstage/UserInterface";
-import BSHome from "@/components/pages/Backstage/BSHome";
-import Register from "@/components/pages/Register";
-import Person from "@/components/pages/Person";
-import file from "@/components/pages/File";
-import RoleInterface from "@/components/pages/Backstage/RoleInterface";
-import MenuInterface from "@/components/pages/Backstage/MenuInterface";
 
-			// 引入VueRouter
+import Register from "@/components/pages/Register";
+import NotFind from "@/components/pages/NotFind";
+import Person from "@/components/pages/backgroundPage/Person";
+import Password from "@/components/pages/backgroundPage/Password";
+
+
+// 引入VueRouter
 Vue.use(VueRouter)
 
 // 创建router实例对象，去管理一组一组的路由规则
-export default new VueRouter({
-    routes:[
-        {
-            path:"/wenda",
-            component:QuestionsAndAnswers,
-            meta:{keepAlive:true},
-            redirect:"/wenda/home",
-            children:[
-                {
-                    name:"question",
-                    path: "/wenda/question",
-                    component: questionAndAnswerPage,
-                    meta:{keepAlive:true},
-                },
-                {
-                    name:'qahome',
-                    path:"/wenda/home",
-                    component:QASubpage,
-                    meta:{keepAlive:true},
-                },
+
+const routes =[
+    {
+        path:"/wenda",
+        component:QuestionsAndAnswers,
+        meta:{keepAlive:true},
+        redirect:"/wenda/home",
+        children:[
+            {
+                name:"question",
+                path: "/wenda/question",
+                component: questionAndAnswerPage,
+                meta:{keepAlive:true},
+            },
+            {
+                name:'qahome',
+                path:"/wenda/home",
+                component:QASubpage,
+                meta:{keepAlive:true},
+            },
 
 
-            ]
-        },
-        {
-            path:"/rebang",
-            component:HotList,
-            meta:{keepAlive:true},
-            redirect:'/rebang/home',
-            children:[
-                {
-                    name:'tiezi',
-                    path: '/rebang/tiezi',
-                    component: TheArticleDetails,
-                    meta:{keepAlive:true},
-                },
-                {
-                    name:'rbhome',
-                    path:'/rebang/home',
-                    component: hotListPage,
-                    meta:{keepAlive:true},
-                },
+        ]
+    },
+    {
+        path:"/rebang",
+        component:HotList,
+        meta:{keepAlive:true},
+        redirect:'/rebang/home',
+        children:[
+            {
+                name:'tiezi',
+                path: '/rebang/tiezi',
+                component: TheArticleDetails,
+                meta:{keepAlive:true},
+            },
+            {
+                name:'rbhome',
+                path:'/rebang/home',
+                component: hotListPage,
+                meta:{keepAlive:true},
+            },
 
-            ]
+        ]
 
-        },
-        {
-            path:"/huati",
-            component:Topics,
-            meta:{keepAlive:true},
-        },
-        {
-            path:"/shuma",
-            component:Digital,
-            meta:{keepAlive:true},
-        },
-        {
-            path:"/home",
-            component:HaloHome,
-            meta:{keepAlive:true},
-        },
-        {
-            path:"/jiaocheng",
-            component:Course,
-            meta:{keepAlive:true},
-            children:[
-                {
-                    name:'jchome',
-                    path:'/jiaocheng/jchome',
-                    component:CourseHome,
-                    meta:{keepAlive:true},
-                },
-                {
-                    path:'/jiaocheng',
-                    redirect:"/jiaocheng/jchome",
-                    meta:{keepAlive:true},
-                }
+    },
+    {
+        path:"/huati",
+        component:Topics,
+        meta:{keepAlive:true},
+    },
+    {
+        path:"/shuma",
+        component:Digital,
+        meta:{keepAlive:true},
+    },
+    {
+        path:"/Halohome",
+        component:HaloHome,
+        meta:{keepAlive:true},
+    },
+    {
+        path:"/jiaocheng",
+        component:Course,
+        meta:{keepAlive:true},
+        children:[
+            {
+                name:'jchome',
+                path:'/jiaocheng/jchome',
+                component:CourseHome,
+                meta:{keepAlive:true},
+            },
+            {
+                path:'/jiaocheng',
+                redirect:"/jiaocheng/jchome",
+                meta:{keepAlive:true},
+            }
 
-            ]
-        },
-        {
-            path:"/zhibo",
-            component:LIVE,
-            meta:{keepAlive:true},
-        },
-        {
-            path:"/zhongce",
-            component:publicTest,
-            meta:{keepAlive:true},
-        },
-        {
-            path:"/paihangbang",
-            component:RankingList,
-            meta:{keepAlive:true},
-        },
-        {
-            path:'/login',
-            name:'login',
-            component:login,
-            meta:{keepAlive:false},
+        ]
+    },
+    {
+        path:"/zhibo",
+        component:LIVE,
+        meta:{keepAlive:true},
+    },
+    {
+        path:"/zhongce",
+        component:publicTest,
+        meta:{keepAlive:true},
+    },
+    {
+        path:"/paihangbang",
+        component:RankingList,
+        meta:{keepAlive:true},
+    },
+    {
+        path:'/login',
+        name:'login',
+        component:login,
+        meta:{keepAlive:false},
 
-        },
-        {
-            path:'/register',
-            component:Register,
-            meta:{keepAlive:false}
-        },
+    },
+    {
+        path:'/register',
+        component:Register,
+        meta:{keepAlive:false}
+    },
 
-        {
-            path:'/houtai',
-            component:Backstage,
-            redirect:'/houtai/home',
-            meta:{keepAlive:false},
-            children:[
-                {
-                path: 'user',
-                name: 'user',
-                    meta: { title: '首页' },
-                component: UserInterface
-                },
-                {
-                    path: 'home',
-                    name: 'home',
-                    meta: { title: '首页' },
-                    component:BSHome
-                },
-                {
-                    path:'person',
-                    name:'个人信息',
-                    component:Person
-                },
-                {
-                    path:'file',
-                    name:"文件管理",
-                    component: file
-                },
-                {
-                    path:'role',
-                    name:'角色管理',
-                    component: RoleInterface
-                },
-                {
-                    path: 'menu',
-                    name: '菜单管理',
-                    component: MenuInterface
-                }
-            ]
 
-        },
-        {
-            path:'*',
-            redirect:"/home"
-        }
-    ]
+    {
+        path:'/',
+        redirect:"/halohome"
+    },
+    {
+        path: '*',
+        component: NotFind
+    }
+
+]
+
+
+const router=new VueRouter({
+    mode:"history",
+    base:process.env.BASE_URL,
+    routes
 })
 
-//暴露router
+// 提供一个重置路由的方法
+export const resetRouter = () => {
+    router.matcher = new VueRouter({
+        mode: 'history',
+        base: process.env.BASE_URL,
+        routes
+    })
+}
+
+
+export const setRoutes=()=>{
+    const storeMenus=localStorage.getItem("menus")
+    if(storeMenus){
+
+        const currentRouteNames=router.getRoutes().map(v=>v.name)
+        if(!currentRouteNames.includes('Manage'))
+        {
+            //// 拼装动态路由
+            const manageRouter={
+                name:'Manage',
+                path:'/',
+                component:Backstage,
+                meta:{keepAlive:false},
+                children:[
+                    { path: 'person', name: '个人信息', component:Person},
+                    { path: 'password', name: '修改密码', component:Password}
+                ]
+            }
+            const menus=JSON.parse(storeMenus)
+            menus.forEach(item=>{
+                if(item.path){
+                    let itemMenu={
+                        path:item.path.replace("/",""),
+                        component: () => import('@/components/pages/backgroundPage/' + item.pagePath + '.vue'),
+                        name:item.name,
+
+                        meta:{keepAlive:false},
+
+                    }
+                    manageRouter.children.push(itemMenu)
+                }else if(item.children.length){
+                    item.children.forEach(item=>{
+                        if(item.path)
+                        {
+                            let itemMenu={
+                                path:item.path.replace("/",""),
+                                component: () => import('@/components/pages/backgroundPage/' + item.pagePath + '.vue'),
+                                name:item.name,
+
+                                meta:{keepAlive:false},
+
+                            }
+                            manageRouter.children.push(itemMenu)
+                        }
+
+                    })
+                }
+
+
+
+            })
+            // 动态添加到现在的路由对象中去
+            router.addRoute(manageRouter)
+        }
+
+    }
+}
+// 重置我就再set一次路由
+setRoutes()
+
+
+
+export default router
