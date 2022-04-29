@@ -1,6 +1,6 @@
 <template>
 <div class="root">
-  <el-button type="success">提问题</el-button>
+  <el-button type="success" @click="handleAdd" v-if="user.role === 'ROLE_ADMIN'">提问题</el-button>
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span>热门标签</span>
@@ -48,21 +48,170 @@
       </a>
     </div>
   </div>
+  <el-dialog title="问答信息" :visible.sync="dialogFormVisible" width="60%" >
+    <el-form label-width="80px" size="small">
+      <el-form-item label="问题">
+        <el-input v-model="form.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="问题内容">
+        <mavon-editor ref="md" v-model="form.content" :ishljs="true" @imgAdd="imgAdd"/>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="save">确 定</el-button>
+    </div>
+  </el-dialog>
+
+  <el-dialog title="问答信息" :visible.sync="viewDialogVis" width="60%" >
+    <el-card>
+      <div>
+        <mavon-editor
+            class="md"
+            :value="content"
+            :subfield="false"
+            :defaultOpen="'preview'"
+            :toolbarsFlag="false"
+            :editable="false"
+            :scrollStyle="true"
+            :ishljs="true"
+        />
+      </div>
+    </el-card>
+  </el-dialog>
+
 </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "TheLabelCard",
- /*data(){
-    return{
-      QuestionCard:[
-        {text1:"如果电池技术取得了突破,【折叠屏】会迎来大爆发吗？"},
-        {text2:"2022年了，你还觉得【屏下摄像头】是未来吗？"},
-        {text2:"2022年了，你还觉得【屏下摄像头】是未来吗？"}
-      ]
+  data() {
+    return {
+      form: {},
+      tableData: [],
+      name: '',
+      multipleSelection: [],
+      pageNum: 1,
+      pageSize: 10,
+      total: 0,
+      dialogFormVisible: false,
+      teachers: [],
+      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+      content: '',
+      viewDialogVis: false
     }
- },*/
+  },
+  created() {
+    this.load()
+  },
+  methods: {
+    view(content) {
+      this.content = content
+      this.viewDialogVis = true
+    },
+    // 绑定@imgAdd event
+    imgAdd(pos, $file) {
+      let $vm = this.$refs.md
+      // 第一步.将图片上传到服务器.
+      const formData = new FormData();
+      formData.append('file', $file);
+      axios({
+        url: 'http://localhost:9090/file/upload',
+        method: 'post',
+        data: formData,
+        headers: {'Content-Type': 'multipart/form-data'},
+      }).then((res) => {
+        // 第二步.将返回的url替换到文本原位置![...](./0) -> ![...](url)
+        $vm.$img2Url(pos, res.data);
+      })
+    },
+    load() {
+      this.request.get("/question/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.name,
+        }
+      }).then(res => {
+
+        this.tableData = res.data.records
+        this.total = res.data.total
+
+      })
+
+    },
+    changeEnable(row) {
+      this.request.post("/question/update", row).then(res => {
+        if (res.code === '200') {
+          this.$message.success("操作成功")
+        }
+      })
+    },
+    handleAdd() {
+      this.dialogFormVisible = true
+      this.form = {}
+    },
+    handleEdit(row) {
+      this.form = JSON.parse(JSON.stringify(row))
+      this.dialogFormVisible = true
+    },
+    del(id) {
+      this.request.delete("/question/" + id).then(res => {
+        if (res.code === '200') {
+          this.$message.success("删除成功")
+          this.load()
+        } else {
+          this.$message.error("删除失败")
+        }
+      })
+    },
+    handleSelectionChange(val) {
+      console.log(val)
+      this.multipleSelection = val
+    },
+    delBatch() {
+      let ids = this.multipleSelection.map(v => v.id)  // [{}, {}, {}] => [1,2,3]
+      this.request.post("/question/del/batch", ids).then(res => {
+        if (res.code === '200') {
+          this.$message.success("批量删除成功")
+          this.load()
+        } else {
+          this.$message.error("批量删除失败")
+        }
+      })
+    },
+    save() {
+      this.request.post("/question", this.form).then(res => {
+        if (res.code === '200') {
+          this.$message.success("保存成功")
+          this.dialogFormVisible = false
+          this.load()
+        } else {
+          this.$message.error("保存失败")
+        }
+      })
+    },
+    reset() {
+      this.name = ""
+      this.load()
+    },
+    handleSizeChange(pageSize) {
+      console.log(pageSize)
+      this.pageSize = pageSize
+      this.load()
+    },
+    handleCurrentChange(pageNum) {
+      console.log(pageNum)
+      this.pageNum = pageNum
+      this.load()
+    },
+    download(url) {
+      window.open(url)
+    },
+  }
 }
 </script>
 

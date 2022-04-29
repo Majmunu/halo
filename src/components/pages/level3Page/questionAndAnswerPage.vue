@@ -8,18 +8,28 @@
       </Breadcrumb>
     </div>
     <el-card class="box-card card">
-      <h2>我是标题</h2>
+      <h2>{{question.name}}</h2>
       <div class="author">
         <div class="author"> <Avatar icon="ios-person" size="large" /></div>
 
-        <div class="date"><strong>我是作者</strong></div>
+        <div class="date"><strong>{{question.user}}</strong></div>
         <div class="date">
           <span>发布时间：</span>
-          <Time :time="time2"  type="datetime" hash="#hash" />
+          <Time :time="question.time"  type="datetime" hash="#hash" />
         </div>
       </div>
-      <div class="empty">
-        <el-empty description="我是问题详情"></el-empty>
+      <div style="margin-top: 80px;margin-bottom: 20px">
+<!--        <el-empty description="我是问题详情"></el-empty>-->
+        <mavon-editor
+            class="md"
+            :value="question.content"
+            :subfield="false"
+            :defaultOpen="'preview'"
+            :toolbarsFlag="false"
+            :editable="false"
+            :scrollStyle="true"
+            :ishljs="true"
+        />
       </div>
       <div>
         <Tag color="success">我是</Tag>
@@ -57,7 +67,7 @@
               <div class="author">
                 <div class="author"> <Avatar icon="ios-person" size="large" /></div>
 
-                <div class="date"><strong>我是作者</strong></div>
+                <div class="date"><strong>1</strong></div>
                 <div class="date">
                   <span>发布时间：</span>
                   <Time :time="time2" hash="#hash" />
@@ -95,18 +105,119 @@
 
     </el-card>
 
+
   </div>
 
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "questionAndAnswerPage",
+  created() {
+    this.load()
+  },
  data () {
   return {
-    time2: (new Date()).getTime()
+    time2: (new Date()).getTime(),
+    form: {},
+    question: {},
+
+    multipleSelection: [],
+
+    dialogFormVisible: false,
+
+    user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+    content: '',
+    viewDialogVis: false
   }
-}
+},
+  methods: {
+    view(content) {
+      this.content = content
+      this.viewDialogVis = true
+    },
+    // 绑定@imgAdd event
+    imgAdd(pos, $file) {
+      let $vm = this.$refs.md
+      // 第一步.将图片上传到服务器.
+      const formData = new FormData();
+      formData.append('file', $file);
+      axios({
+        url: 'http://localhost:9090/file/upload',
+        method: 'post',
+        data: formData,
+        headers: {'Content-Type': 'multipart/form-data'},
+      }).then((res) => {
+        // 第二步.将返回的url替换到文本原位置![...](./0) -> ![...](url)
+        $vm.$img2Url(pos, res.data);
+      })
+    },
+    load() {
+      const id=this.$route.query.id
+      this.request.get("/question/"+id).then(res => {
+        this.question = res.data
+
+      })
+
+    },
+    changeEnable(row) {
+      this.request.post("/question/update", row).then(res => {
+        if (res.code === '200') {
+          this.$message.success("操作成功")
+        }
+      })
+    },
+    handleAdd() {
+      this.dialogFormVisible = true
+      this.form = {}
+    },
+    handleEdit(row) {
+      this.form = JSON.parse(JSON.stringify(row))
+      this.dialogFormVisible = true
+    },
+    del(id) {
+      this.request.delete("/question/" + id).then(res => {
+        if (res.code === '200') {
+          this.$message.success("删除成功")
+          this.load()
+        } else {
+          this.$message.error("删除失败")
+        }
+      })
+    },
+    handleSelectionChange(val) {
+      console.log(val)
+      this.multipleSelection = val
+    },
+    delBatch() {
+      let ids = this.multipleSelection.map(v => v.id)  // [{}, {}, {}] => [1,2,3]
+      this.request.post("/question/del/batch", ids).then(res => {
+        if (res.code === '200') {
+          this.$message.success("批量删除成功")
+          this.load()
+        } else {
+          this.$message.error("批量删除失败")
+        }
+      })
+    },
+    save() {
+      this.request.post("/question", this.form).then(res => {
+        if (res.code === '200') {
+          this.$message.success("保存成功")
+          this.dialogFormVisible = false
+          this.load()
+        } else {
+          this.$message.error("保存失败")
+        }
+      })
+    },
+
+    download(url) {
+      window.open(url)
+    },
+  }
 }
 </script>
 

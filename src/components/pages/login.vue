@@ -44,6 +44,7 @@
 
 <script>
 import request from "@/utils/request";
+import {setRoutes} from "@/router";
 
 export default {
   name: "login",
@@ -74,6 +75,8 @@ export default {
             if(res.code === '200'){
               localStorage.setItem("user",JSON.stringify(res.data))//存储用户信息到浏览器
               localStorage.setItem("menus",JSON.stringify(res.data.menus))
+              localStorage.setItem("userId",JSON.stringify(res.data))
+              console.log(res.data)
               //动态设置当前用户的路由
               setRoutes()
               // 重置路由

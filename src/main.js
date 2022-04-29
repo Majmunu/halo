@@ -22,10 +22,14 @@ import request from "@/utils/request";
 //关闭生产提示
 Vue.config.productionTip = false
 Vue.prototype.request=request
+// main.js全局注册
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 //应用插件
 Vue.use(VueRouter);
 Vue.use(ElementUI);
 Vue.use(ViewUI);
+Vue.use(mavonEditor)
 
 
 new Vue({

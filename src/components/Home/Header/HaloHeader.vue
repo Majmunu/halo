@@ -81,7 +81,7 @@ export default {
   data(){
     return{
       TheHeadContent:[
-        {id:'001',name:'首页',address:'/home'},
+        {id:'001',name:'首页',address:'/halohome'},
         {id:'002',name:'问答',address:'/wenda'},
         {id:'003',name:'热榜',address:'/rebang'},
         {id:'004',name:'话题',address:'/huati'},
