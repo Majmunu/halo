@@ -51,7 +51,8 @@
         </p>
         <div class="collapse" id="collapseExample">
           <div class="card card-body">
-            <Input v-model="value19" :border="false" placeholder="输入回复..." />
+            <Input v-model="commentForm.content" :border="false" placeholder="输入回复..." />
+            <el-button type="primary" size="small" @click="saveComment">评论</el-button>
           </div>
         </div>
 
@@ -64,7 +65,7 @@
         <div>
           <Tabs type="card">
             <TabPane label="最热">
-              <div class="author">
+<!--              <div class="author">
                 <div class="author"> <Avatar icon="ios-person" size="large" /></div>
 
                 <div class="date"><strong>1</strong></div>
@@ -90,6 +91,103 @@
                     <Input v-model="value19" :border="false" placeholder="输入回复..." />
                   </div>
                 </div>
+              </div>-->
+              <div  class="clearfix">
+                <div
+                    v-for="item in comments"
+                    :key="item.id"
+                    style="border-bottom: 1px solid #cccccc;padding: 10px 0;display: flex">
+
+                  <div style="width: 100px"><!--头像-->
+                    <el-avatar :size="50" :src="item.avatarUrl"></el-avatar>
+
+                  </div>
+
+                  <div style="flex: 1;padding-top: 5px;font-size: 14px;line-height: 25px"><!--内容-->
+                    <b>{{ item.nickname }}：</b>
+                    <span>{{ item.content }}</span>
+
+                    <div style="display: flex; line-height: 20px; margin-top: 5px">
+                      <div style="width: 200px;">
+                        <i class="el-icon-time"></i><span style="margin-left: 5px"> <Time :time="item.time" type="datetime" /></span>
+                      </div>
+                      <div style="text-align: right; flex: 1;padding-right: 20px">
+<!--                        <el-button style="margin-left: 5px" type="text" @click="handleReply(item.id)">回复</el-button>-->
+                        <button
+                            class="btn btn-primary btn-sm"
+                            type="button"
+                            data-toggle="collapse"
+                            :data-target="`#`+`_`+item.id"
+                            aria-expanded="false"
+                            aria-controls="collapseExample"
+                            @click="handleReply(item.id)"
+                        >
+                          回复
+                        </button>
+<!--                        <el-button type="text" style="color: red" @click="delComment(item.id)"   v-if="user.nickname === item.nickname">删除</el-button>-->
+                        <button
+                            type="text"
+                            class="btn btn-danger btn-sm"
+                            @click="delComment(item.id)"
+                            style="margin-left: 8px"
+                            v-if="user.nickname === item.nickname">删除</button>
+                      </div>
+
+                    </div>
+                    <div class="collapse value" :id="`_`+item.id">
+                      <div class="card card-body">
+                        <Input v-model="commentForm.contentReplay" :border="false" placeholder="输入回复..." />
+                        <el-button type="primary" size="small" @click="saveComment" style="width: 60px">评论</el-button>
+                      </div>
+                    </div>
+                    <div  class="replay clearfix " v-if="item.children.length" style="text-align: left;vertical-align: top" >
+                      <!--回复列表-->
+                      <div v-for="subItem in item.children" :key="subItem.id"  style=" padding: 5px 20px;border-bottom: 1px solid #cccccc;">
+                        <!--          回复列表-->
+                        <div style="font-size: 14px; padding: 5px 0; line-height: 25px">
+                          <div>
+                            <b style="color: #3a8ee6" v-if="subItem.pnickname">@{{ subItem.pnickname }}</b>
+                          </div>
+                          <div style="padding-left: 5px">
+                            <b>{{ subItem.nickname }}：</b>
+                            <span>{{ subItem.content }}</span>
+                          </div>
+
+                          <div style="display: flex; line-height: 20px; margin-top: 5px; padding-left: 5px">
+                            <div style="width: 500px;">
+                              <i class="el-icon-time"></i><span style="margin-left: 5px">{{ subItem.time }}</span>
+                              <div class="collapse card card-body" :id="`_`+subItem.id">
+                                <Input v-model="commentForm.content" :border="false" placeholder="输入回复..." />
+                                <el-button type="primary" size="small" @click="saveComment" style="width: 60px">评论</el-button>
+                              </div>
+                            </div>
+
+                            <div style="text-align: right; flex: 1">
+                              <button
+                                  class="btn btn-outline-primary btn-sm"
+                                  type="button"
+                                  data-toggle="collapse"
+                                  :data-target="`#`+`_`+subItem.id"
+                                  aria-expanded="false"
+                                  aria-controls="collapseExample"
+                                  @click="handleReply(subItem.id)"
+                              >
+                                回复
+                              </button>
+                              <button type="text"  class="btn btn-outline-danger btn-sm" style="margin-left: 5px"  @click="delComment(subItem.id)" v-if="user.nickname === subItem.nickname">删除</button>
+
+                            </div>
+
+                          </div>
+                        </div>   <!--  内容-->
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+
               </div>
 
             </TabPane>
@@ -117,20 +215,23 @@ export default {
   name: "questionAndAnswerPage",
   created() {
     this.load()
+    this.loadComment()
   },
  data () {
   return {
     time2: (new Date()).getTime(),
     form: {},
     question: {},
-
     multipleSelection: [],
-
     dialogFormVisible: false,
-
     user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
     content: '',
-    viewDialogVis: false
+    viewDialogVis: false,
+    commentContent:'',
+    comments:[],
+    commentForm:{},
+    id: this.$route.query.id,
+
   }
 },
   methods: {
@@ -161,6 +262,12 @@ export default {
 
       })
 
+    },
+    loadComment(){
+
+      this.request.get("/answers/tree/"+this.id).then(res => {
+        this.comments = res.data
+      })
     },
     changeEnable(row) {
       this.request.post("/question/update", row).then(res => {
@@ -213,10 +320,40 @@ export default {
         }
       })
     },
+    saveComment() {
+      if (!this.user.username) {
+        this.$message.warning("请登录后操作")
 
-    download(url) {
-      window.open(url)
+        return
+      }
+      this.commentForm.questionId=this.id
+      if(this.commentForm.contentReplay){
+          this.commentForm.content=this.commentForm.contentReplay
+      }
+      this.request.post("/answers", this.commentForm).then(res => {
+        if (res.code === '200') {
+          this.$message.success("评论成功")
+          this.commentForm = {}  // 初始化评论对象内容
+          this.loadComment()
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     },
+    delComment(id) {
+      this.request.delete("/answers/" + id).then(res => {
+        if (res.code === '200') {
+          this.$message.success("删除成功")
+          this.loadComment()
+        } else {
+          this.$message.error("删除失败")
+        }
+      })
+    },
+    handleReply(pid){
+      this.commentForm={pid:pid,originId:pid}
+    }
+
   }
 }
 </script>
