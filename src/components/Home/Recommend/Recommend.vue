@@ -3,8 +3,9 @@
 
     <div class="Recommend col-xl-9">
       <el-card class="box-card card">
+        <h3 style="float: left">推荐专区</h3>
+        <Icon style="float: left;size: 30px;color: #00965e" size="30" type="ios-arrow-forward" />
       <div class="RecommendTitle">
-        <h3>推荐专区</h3>
         <RecommendCard></RecommendCard>
 
       </div>
@@ -35,9 +36,9 @@ export default {
 
 }
 .RecommendTitle{
-
+margin-top: 50px;
 }
 .root{
-  margin-top: 40px;
+  margin-top: 10px;
 }
 </style>

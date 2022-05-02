@@ -25,6 +25,7 @@ Vue.prototype.request=request
 // main.js全局注册
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
+import app from "@/App";
 //应用插件
 Vue.use(VueRouter);
 Vue.use(ElementUI);
@@ -34,7 +35,10 @@ Vue.use(mavonEditor)
 
 new Vue({
   render: h => h(App),
-  router:router
+  router:router,
+  beforeCreate() {
+    Vue.prototype.$bus = this // 安装全局事件总线，$bus 就是当前应用的 vm
+  }
 
 
 }).$mount('#app')

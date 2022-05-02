@@ -84,6 +84,7 @@
 
 <script>
 import axios from "axios";
+import {setRoutes} from "@/router";
 
 export default {
   name: "TheTopicsCard",
@@ -184,6 +185,7 @@ export default {
           this.$message.success("保存成功")
           this.dialogFormVisible = false
           this.load()
+          setRoutes()
         } else {
           this.$message.error("保存失败")
         }

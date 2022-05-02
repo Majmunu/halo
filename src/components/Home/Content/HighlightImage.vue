@@ -21,7 +21,7 @@ export default {
       item:[
         {url:require('@/assets/images/home/1.jpg')},
         {url:require('@/assets/images/home/2.jpg')},
-        {url:require('@/assets/images/home/w.jpg')},
+        {url:require('@/assets/images/home/3.jpg')},
 
       ]
     }

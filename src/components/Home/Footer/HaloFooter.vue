@@ -4,7 +4,7 @@
     <el-card class="box-card card">
   <div class="FooterLeft col-xl-6">
     <div>
-      <h2>?????</h2>
+      <h2>HALO</h2>
       <h2>发现科技新生活</h2>
     </div>
     <div>

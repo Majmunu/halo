@@ -3,7 +3,9 @@
     <div class="Contributor col-xl-9">
       <el-card class="box-card card">
       <div class="RecommendTitle">
-        <h3>社区贡献者</h3>
+        <h3 style="float: left">社区贡献者</h3>
+        <Icon style="float: left;size: 30px;color: #00965e" size="30" type="ios-arrow-forward" />
+
       </div>
       <ContributorTable/>
       </el-card>

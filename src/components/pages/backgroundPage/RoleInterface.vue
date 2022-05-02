@@ -26,10 +26,11 @@
         <i class="el-icon-remove-outline"></i>
       </button>
     </el-popconfirm>
-
+<!--    action="http://localhost:9090/user/import"-->
     <el-upload
         style="display: inline-block"
-        action="http://localhost:9090/user/import"
+
+        :action="'http://' + serverIp + ':9090/user/import'"
         :show-file-list="false"
         accept="xlsx"
         :on-success="handleExcelImportSuccess">

@@ -31,10 +31,10 @@
         <i class="el-icon-remove-outline"></i>
       </button>
     </el-popconfirm>
-
+<!--    action="http://localhost:9090/user/import"-->
     <el-upload
         style="display: inline-block"
-        action="http://localhost:9090/user/import"
+        :action="'http://' + serverIp + ':9090/user/import'"
         :show-file-list="false"
         accept="xlsx"
         :on-success="handleExcelImportSuccess"
@@ -167,11 +167,13 @@
 
 <script>
 import request from "@/utils/request";
+import {serverIp} from "../../../../public/config";
 
 export default {
   name: "UserInterface",
   data(){
     return{
+      serverIp: serverIp,
       tableData: [],
       total:0,
       pageSize:10,
@@ -295,7 +297,8 @@ export default {
       })
     },
     exp(){
-      window.open("http://localhost:9090/user/export")
+     /* window.open("http://localhost:9090/user/export")*/
+      window.open(`http://${serverIp}:9090/user/export`)
     },
     handleExcelImportSuccess() {
       this.$message.success("导入成功")

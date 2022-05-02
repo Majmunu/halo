@@ -10,12 +10,32 @@
       </div>
       <el-card class="box-card card">
         <h2>{{article.name}}</h2>
+        <div style="float: right"  v-if="user.nickname === article.user">
+
+          <el-button type="success" @click="handleEdit(article)">编辑 <i class="el-icon-edit"></i></el-button>
+          <el-popconfirm
+              class="ml-5"
+              confirm-button-text='确定'
+              cancel-button-text='我再想想'
+              icon="el-icon-info"
+              icon-color="red"
+              title="您确定删除吗？"
+              @confirm="del(article.id)"
+          >
+            <el-button type="danger" slot="reference" >删除 <i class="el-icon-remove-outline"></i></el-button>
+          </el-popconfirm>
+
+
+        </div>
         <div class="author">
-          <div class="author"> <Avatar icon="ios-person" size="large" /></div>
+
+
+
+          <div class="author">  <el-avatar    :size="40" :src="article.avatarUrl"></el-avatar> </div>
 
           <div class="date"><strong>{{article.user}}</strong></div>
           <div class="date">
-            <span>发布时间：</span>
+            <span>发布于：</span>
             <Time :time="article.time"  type="datetime" hash="#hash" />
           </div>
         </div>
@@ -58,7 +78,7 @@
           <div class="collapse" id="collapseExample">
             <div class="card card-body">
               <Input v-model="commentForm.content" :border="false" placeholder="输入回复..." />
-              <el-button type="primary" size="small" @click="saveComment">评论</el-button>
+              <el-button type="primary" size="small" @click="saveComment" style="width: 60px">评论</el-button>
             </div>
           </div>
 
@@ -73,13 +93,14 @@
             <Tabs type="card">
               <TabPane label="最热评论">
 
-                <div style="border: 3px solid red" class="clearfix">
+                <div style="border: 3px solid white" class="clearfix">
                   <div
                       v-for="item in comments"
                       :key="item.id"
                       style="padding: 10px 0;display: flex;border-bottom: 1px solid #cccccc;">
 
                     <div style="width: 100px"><!--头像-->
+
                       <el-avatar :size="50" :src="item.avatarUrl"></el-avatar>
 
                     </div>
@@ -128,7 +149,8 @@
                                   <b style="color: #3a8ee6" v-if="subItem.pnickname">@{{ subItem.pnickname }}</b>
                                 </div>
                                 <div style="padding-left: 5px">
-                                  <b>{{ subItem.nickname }}：</b>
+                                  <el-avatar :size="30" :src="subItem.avatarUrl" style="margin-right: 5px"></el-avatar>
+                                  <b >{{ subItem.nickname }}：</b>
                                   <span>{{ subItem.content }}</span>
                                 </div>
 
@@ -186,12 +208,29 @@
 
       </el-card>
 
+      <el-dialog title="文章信息" :visible.sync="dialogFormVisible" width="60%" >
+        <el-form label-width="80px" size="small">
+          <el-form-item label="文章标题">
+            <el-input v-model="article.name" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="文章内容">
+            <mavon-editor ref="md" v-model="article.content" :ishljs="true" @imgAdd="imgAdd"/>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="save">确 定</el-button>
+        </div>
+      </el-dialog>
+
+
     </div>
 
   </template>
 
   <script>
     import axios from "axios";
+    import {serverIp} from "../../../../public/config";
 
 
     export default {
@@ -199,9 +238,8 @@
       data () {
         return {
           time2: (new Date()).getTime(),
-
+          form: {},
           article: {},
-
           multipleSelection: [],
           dialogFormVisible: false,
           user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
@@ -218,6 +256,9 @@
       created() {
         this.load()
         this.loadComment()
+
+      },beforeCreate() {
+        this.loadComment()
       },
       methods: {
         view(content) {
@@ -231,7 +272,7 @@
           const formData = new FormData();
           formData.append('file', $file);
           axios({
-            url: 'http://localhost:9090/file/upload',
+            url: "http://" + serverIp + ":9090/file/upload",
             method: 'post',
             data: formData,
             headers: {'Content-Type': 'multipart/form-data'},
@@ -263,7 +304,7 @@
           this.request.delete("/article/" + id).then(res => {
             if (res.code === '200') {
               this.$message.success("删除成功")
-              this.load()
+              this.$router.push("/huati")
             } else {
               this.$message.error("删除失败")
             }
@@ -271,7 +312,7 @@
         },
 
         save() {
-          this.request.post("/article", this.form).then(res => {
+          this.request.post("/article", this.article).then(res => {
             if (res.code === '200') {
               this.$message.success("保存成功")
               this.dialogFormVisible = false
@@ -314,8 +355,17 @@
         },
         handleReply(pid){
           this.commentForm={pid:pid}
-        }
-      }
+        },
+        handleEdit(row) {
+          this.article = JSON.parse(JSON.stringify(row))
+          this.dialogFormVisible = true
+        },
+        handleAdd() {
+          this.dialogFormVisible = true
+          this.article = {}
+        },
+
+      },
     }
   </script>
 

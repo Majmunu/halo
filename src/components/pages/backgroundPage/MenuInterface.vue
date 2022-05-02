@@ -26,12 +26,13 @@
         <i class="el-icon-remove-outline"></i>
       </button>
     </el-popconfirm>
-
+    action="http://localhost:9090/user/import"
     <el-upload
         style="display: inline-block"
-        action="http://localhost:9090/user/import"
-        :show-file-list="false"
         accept="xlsx"
+        :action="'http://' + serverIp +':9090/user/import'"
+        :show-file-list="false"
+
         :on-success="handleExcelImportSuccess">
     </el-upload>
   </div>
@@ -147,11 +148,13 @@
 
 <script>
 import request from "@/utils/request";
+import {serverIp} from "../../../../public/config";
 
 export default {
   name: "MenuInterface",
   data(){
     return{
+      serverIp: serverIp,
       tableData: [],
       total:0,
       pageSize:10,
@@ -273,7 +276,7 @@ export default {
       })
     },
     exp(){
-      window.open("http://localhost:9090/menu/export")
+      window.open(`http://${serverIp}:9090/role/export`)
     },
     handleExcelImportSuccess() {
       this.$message.success("导入成功")
