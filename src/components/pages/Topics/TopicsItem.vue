@@ -71,7 +71,7 @@
 import Navigation1 from "@/components/pages/HotList/Navigation1";
 import axios from "axios";
 import {serverIp} from "../../../../public/config";
-import {setRoutes} from "@/router";
+import {resetRouter, setRoutes} from "@/router";
 export default {
   name: "TopicsItem",
   components:{
@@ -198,6 +198,7 @@ export default {
           this.dialogFormVisible = false
           this.load()
           this.loadArticle()
+
         } else {
           this.$message.error("保存失败")
         }

@@ -23,6 +23,7 @@ import Person from "@/components/pages/backgroundPage/Person";
 import Password from "@/components/pages/backgroundPage/Password";
 
 
+
 // 引入VueRouter
 Vue.use(VueRouter)
 
@@ -129,6 +130,7 @@ const routes =[
         meta:{keepAlive:false},
 
     },
+
     {
         path:'/register',
         component:Register,

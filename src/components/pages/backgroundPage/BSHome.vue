@@ -98,7 +98,7 @@ export default {
   name: "BSHome",
   data(){
     return{
-
+      num:[]
     }
   },
   mounted() {

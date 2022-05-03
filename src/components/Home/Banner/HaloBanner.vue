@@ -12,7 +12,7 @@
           href="#" role="button"
       >{{BannerButton}}</router-link>
     </div>
-<BannerCard style="margin-top: 100px;"/>
+<BannerCard style=" margin-top: 100px;"/>
   </div>
 
 </template>
@@ -36,6 +36,10 @@ export default {
       user:localStorage.getItem("user") ?JSON.parse(localStorage.getItem("user")) :{}
 
     }
+
+  },
+  methods:{
+
 
   }
 }

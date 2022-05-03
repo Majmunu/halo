@@ -63,7 +63,7 @@
           <button type="button" class="btn btn-light btn-sm shoucang">🏷️收藏</button>
         </div>
         <div class="i">
-          <p>
+
             <button
                 class="btn btn-primary"
                 type="button" data-toggle="collapse"
@@ -73,8 +73,12 @@
             >
               回复
             </button>
-            <el-button class="share-button" icon="el-icon-share" type="primary"></el-button>
-          </p>
+            <el-tooltip  placement="top-start" effect="light" >
+          <div slot="content"><share :config="config"></share></div>
+              <el-button class="share-button" icon="el-icon-share" type="primary"></el-button>
+
+             </el-tooltip>
+
           <div class="collapse" id="collapseExample">
             <div class="card card-body">
               <Input v-model="commentForm.content" :border="false" placeholder="输入回复..." />

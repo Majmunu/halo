@@ -19,6 +19,12 @@ import router from "@/router"
 import request from "@/utils/request";
 
 
+import Share from 'vue-social-share'
+
+
+
+
+
 //关闭生产提示
 Vue.config.productionTip = false
 Vue.prototype.request=request
@@ -31,6 +37,7 @@ Vue.use(VueRouter);
 Vue.use(ElementUI);
 Vue.use(ViewUI);
 Vue.use(mavonEditor)
+Vue.use(Share)
 
 
 new Vue({

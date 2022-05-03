@@ -15,7 +15,7 @@
       <img src="@/assets/logo.svg" width="90px" alt="false" v-show="logoTextShow">
       <b style="color: white" v-show="logoTextShow">后台管理系统</b>
     </div>
-    <div v-for="item in menus" :key="item.id">
+    <div v-for="item in menus" :key="item.id" >
 
       <div v-if="item.path">
 
@@ -42,8 +42,6 @@
             </el-menu-item>
           </div>
         </el-submenu>
-
-
 
       </div>
 
@@ -89,7 +87,8 @@ export default {
   },
   data(){
     return{
-      menus:localStorage.getItem("menus")?JSON.parse(localStorage.getItem("menus")):[]
+      menus:localStorage.getItem("menus")?JSON.parse(localStorage.getItem("menus")):[],
+
     }
   },
   created() {

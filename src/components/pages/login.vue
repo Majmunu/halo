@@ -20,7 +20,13 @@
         <Input  v-model="user.password" type="password" :border="false" password placeholder="输入密码" />
           </FormItem>
             <Divider />
+          <div style="display: flex">
+            <el-input prefix-icon="el-icon-key" v-model="user.validCode" style="width: 50%" placeholder="请输入验证码"></el-input>
+           <ValidCode @input="createValidCode"/>
+          </div>
+
         </Form>
+
       </div>
       <div class="text">
         没有账户？<router-link to="/register">创建一个</router-link>
@@ -45,14 +51,20 @@
 <script>
 import request from "@/utils/request";
 import {setRoutes} from "@/router";
+import ValidCode from "@/components/pages/ValidCode";
 
 export default {
   name: "login",
+  components: {ValidCode},
+
   data(){
     return{
+      validCode:'',
+
       user:{
         username: '',
         password: '',
+
       },
       ruleValidate: {
         username: [
@@ -68,15 +80,29 @@ export default {
     }
   },
   methods:{
+    createValidCode(data){
+      this.validCode=data
+    },
     login(){
       this.$refs['userForm'].validate((valid) => {
         if (valid) {  // 表单校验合法
+          if (!this.user.validCode) {
+            this.$message.error("请填写验证码")
+            return
+          }
+          if(this.user.validCode.toLowerCase() !== this.validCode.toLowerCase()) {
+            this.$message.error("验证码错误")
+            console.log(this.validCode)
+
+            return
+          }
+
           request.post("/user/login",this.user).then(res=>{
             if(res.code === '200'){
               localStorage.setItem("user",JSON.stringify(res.data))//存储用户信息到浏览器
               localStorage.setItem("menus",JSON.stringify(res.data.menus))
               localStorage.setItem("userId",JSON.stringify(res.data))
-              console.log(res.data)
+
               //动态设置当前用户的路由
               setRoutes()
               // 重置路由

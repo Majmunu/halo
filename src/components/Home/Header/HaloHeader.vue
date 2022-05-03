@@ -76,6 +76,7 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
+import {resetRouter} from "@/router";
 export default {
   name: "HaloHeader",
   data(){
@@ -98,12 +99,16 @@ export default {
       user:localStorage.getItem("user") ?JSON.parse(localStorage.getItem("user")) :{}
 
     }
+  },created() {
+
   },
   methods:{
     logout(){
       this.$router.push("/login")
       localStorage.removeItem("user")
       this.$message.success("退出成功")
+      localStorage.removeItem("menus")
+      resetRouter()
     },
     login(){
       this.$router.push({
