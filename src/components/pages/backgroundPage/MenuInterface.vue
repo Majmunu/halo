@@ -26,7 +26,7 @@
         <i class="el-icon-remove-outline"></i>
       </button>
     </el-popconfirm>
-    action="http://localhost:9090/user/import"
+<!--    action="http://localhost:9090/user/import"-->
     <el-upload
         style="display: inline-block"
         accept="xlsx"

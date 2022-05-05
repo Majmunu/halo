@@ -12,6 +12,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
 
+
 //VueRouter
 import VueRouter from "vue-router"
 //引入路由器
@@ -19,10 +20,9 @@ import router from "@/router"
 import request from "@/utils/request";
 
 
+
+
 import Share from 'vue-social-share'
-
-
-
 
 
 //关闭生产提示
@@ -38,6 +38,7 @@ Vue.use(ElementUI);
 Vue.use(ViewUI);
 Vue.use(mavonEditor)
 Vue.use(Share)
+
 
 
 new Vue({

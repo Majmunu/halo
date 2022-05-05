@@ -6,7 +6,7 @@
             <span :class="collapseBtnclass" style="cursor: pointer;" @click="collapse">
             </span>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="display: inline-block;margin-left: 20px;">
-        <el-breadcrumb-item :to="{ path: '/houtai' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/halohome' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/houtai/user' }">用户管理</el-breadcrumb-item>
       </el-breadcrumb>
     </div>

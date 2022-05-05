@@ -67,6 +67,8 @@
         <el-form-item label="文章标题">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
+
+
         <el-form-item label="文章内容">
           <mavon-editor ref="md" v-model="form.content" :ishljs="true" @imgAdd="imgAdd"/>
         </el-form-item>

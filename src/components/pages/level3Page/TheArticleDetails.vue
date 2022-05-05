@@ -136,7 +136,7 @@
                               class="btn btn-danger btn-sm"
                               @click="delComment(item.id)"
                               style="margin-left: 8px"
-                              v-if="user.nickname === item.nickname">删除</button>
+                              v-if="user.id === item.userId">删除</button>
 
                           <div class="collapse value" :id="`_`+item.id">
                             <div class="card card-body">
@@ -179,7 +179,7 @@
                                     >
                                       回复
                                     </button>
-                                    <button type="text"  class="btn btn-outline-danger btn-sm" style="margin-left: 5px"  @click="delComment(subItem.id)" v-if="user.nickname === subItem.nickname">删除</button>
+                                    <button type="text"  class="btn btn-outline-danger btn-sm" style="margin-left: 5px"  @click="delComment(subItem.id)" v-if="user.id === subItem.userId">删除</button>
 
                                   </div>
 
