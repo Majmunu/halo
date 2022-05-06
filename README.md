@@ -1,24 +1,20 @@
-# halo
+## 前端技术栈
+Vue
 
-## Project setup
-```
-npm install
-```
+Vuex
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Vue Router
 
-### Compiles and minifies for production
-```
-npm run build
-```
+Axios
 
-### Lints and fixes files
-```
-npm run lint
-```
+Bootstrap
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+jwt
+Element
+
+Vditor
+
+
+markdown
+
+### [后端](https://github.com/chenchen2692/Khonsu)
