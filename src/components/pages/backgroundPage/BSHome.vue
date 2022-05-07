@@ -11,7 +11,7 @@
             用户总数
           </div>
           <div class="CardNum">
-            100
+            {{ this.Usertotal }}
           </div>
         </div>
 
@@ -25,10 +25,10 @@
         </div>
         <div class="clearfix textBox">
           <div style="color: #67C23A"  class="CardTitle">
-            今日IP数
+            文件总数
           </div>
           <div class="CardNum">
-            100
+            {{ this.Filetotal }}
           </div>
         </div>
 
@@ -42,10 +42,10 @@
         </div>
         <div class="clearfix textBox">
           <div style="color:#E6A23C" class="CardTitle">
-            评论数
+            问答数
           </div>
           <div class="CardNum">
-            100
+            {{ Quetotal }}
           </div>
         </div>
 
@@ -61,8 +61,8 @@
           <div style="color: #F56C6C"  class="CardTitle">
             文章数
           </div>
-          <div class="CardNum">
-            100
+          <div class="CardNum" >
+           {{this.total}}
           </div>
         </div>
 
@@ -94,11 +94,30 @@
 
 <script>
 import * as echarts from 'echarts';
+import request from "@/utils/request";
 export default {
   name: "BSHome",
   data(){
     return{
-      num:[]
+      num:[],
+      Filetotal:'',
+      Usertotal:'',
+      Quetotal:'',
+      form: {},
+      tableData: [],
+      name: '',
+      multipleSelection: [],
+      pageNum: 1,
+      pageSize: 10,
+      total: '',
+      dialogFormVisible: false,
+      teachers: [],
+      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+      content: '',
+      viewDialogVis: false,
+      article: {},
+      AComments:[]
+
     }
   },
   mounted() {
@@ -194,6 +213,79 @@ export default {
     })
 
 
+  },
+  created() {
+    this.load()
+    this.loadUser()
+    this.loadFile()
+    this.loadQuestion()
+  },
+  methods:{
+    load() {
+      this.request.get("/article/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.name,
+        }
+      }).then(res => {
+
+        this.tableData = res.data.records
+        this.total = res.data.total
+
+
+
+      })
+
+    },
+    loadUser(){
+
+      request.get("/user/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          username: this.username,
+          email:this.email,
+          address:this.address
+        }
+      }).then(res=>{
+        this.tableData=res.data.records
+        this.Usertotal=res.data.total
+      })
+      this.request.get("/role").then(res => {
+        this.roles = res.data
+      })
+
+    },
+    loadFile(){
+
+      request.get("/file/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.name,
+        }
+      }).then(res=>{
+        this.tableData=res.data.records
+        this.Filetotal=res.data.total
+      })
+
+    },
+    loadQuestion() {
+      this.request.get("/question/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.name,
+        }
+      }).then(res => {
+
+        this.tableData = res.data.records
+        this.Quetotal = res.data.total
+
+      })
+
+    },
   }
 }
 </script>

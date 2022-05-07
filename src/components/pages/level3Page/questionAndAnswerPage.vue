@@ -10,12 +10,33 @@
     <el-card class="box-card card">
       <h2>{{question.name}}</h2>
       <div class="author">
-        <div class="author"> <Avatar icon="ios-person" size="large" /></div>
+        <div class="author">
+          <Avatar :src="question.avatarUrl" size="large" />
+
+        </div>
 
         <div class="date"><strong>{{question.user}}</strong></div>
         <div class="date">
           <span>发布时间：</span>
           <Time :time="question.time"  type="datetime" hash="#hash" />
+        </div>
+
+        <div style="float: right;margin-left: 400px"  v-if="user.nickname === question.user">
+
+          <el-button type="success" @click="handleEdit(question)">编辑 <i class="el-icon-edit"></i></el-button>
+          <el-popconfirm
+              class="ml-5"
+              confirm-button-text='确定'
+              cancel-button-text='我再想想'
+              icon="el-icon-info"
+              icon-color="red"
+              title="您确定删除吗？"
+              @confirm="del(question.id)"
+          >
+            <el-button type="danger" slot="reference" >删除 <i class="el-icon-remove-outline"></i></el-button>
+          </el-popconfirm>
+
+
         </div>
       </div>
       <div style="margin-top: 80px;margin-bottom: 20px">
@@ -52,7 +73,7 @@
         <div class="collapse" id="collapseExample">
           <div class="card card-body">
             <Input v-model="commentForm.content" :border="false" placeholder="输入回复..." />
-            <el-button type="primary" size="small" @click="saveComment">评论</el-button>
+            <el-button type="primary" size="small" @click="saveComment" style="width: 60px">评论</el-button>
           </div>
         </div>
 
@@ -217,6 +238,7 @@ export default {
   created() {
     this.load()
     this.loadComment()
+    this.send()
   },
  data () {
   return {
@@ -262,14 +284,21 @@ export default {
       const id=this.$route.query.id
       this.request.get("/question/"+id).then(res => {
         this.question = res.data
+        console.log(this.question)
 
       })
 
     },
-    loadComment(){
+    send() {
+      this.$bus.$emit('length', this.comments.length)
+    },
+      loadComment(){
 
       this.request.get("/answers/tree/"+this.id).then(res => {
         this.comments = res.data
+        console.log(this.comments)
+        console.log(this.comments.length)
+
       })
     },
     changeEnable(row) {
@@ -292,6 +321,7 @@ export default {
         if (res.code === '200') {
           this.$message.success("删除成功")
           this.load()
+          this.$router.push("/wenda")
         } else {
           this.$message.error("删除失败")
         }

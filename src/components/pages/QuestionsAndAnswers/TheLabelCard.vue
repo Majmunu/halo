@@ -1,6 +1,6 @@
 <template>
 <div class="root">
-  <el-button type="success" @click="handleAdd" v-if="user.role === 'ROLE_ADMIN'">提问题</el-button>
+  <el-button type="success" @click="handleAdd">提问题</el-button>
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span>热门标签</span>
@@ -86,6 +86,7 @@
 <script>
 import axios from "axios";
 import {serverIp} from "../../../../public/config";
+import {resetRouter} from "@/router";
 
 export default {
   name: "TheLabelCard",
@@ -190,6 +191,8 @@ export default {
           this.$message.success("保存成功")
           this.dialogFormVisible = false
           this.load()
+          resetRouter()
+          location.reload()
         } else {
           this.$message.error("保存失败")
         }

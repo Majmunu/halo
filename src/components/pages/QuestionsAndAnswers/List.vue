@@ -111,13 +111,17 @@ export default {
       teachers: [],
       user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
       content: '',
-      viewDialogVis: false
+      viewDialogVis: false,
+      questionLength:''
     }
 
   },
   created() {
 
       this.load()
+    this.demo(data)
+
+
 
   },
   computed: {
@@ -127,8 +131,17 @@ export default {
     disabled () {
       return this.loading || this.noMore
     }
+  },mounted() {
+
+
+      this.$bus.$on('length',this.demo)
+
   },
   methods: {
+    demo(data){
+      console.log("haha"+data+212)
+    },
+
     loadPage () {
       this.loading = true
       setTimeout(() => {
@@ -172,6 +185,9 @@ export default {
 
         this.tableData = res.data.records
         this.total = res.data.total
+        this.$store.commit('questionLength')
+
+        console.log( this.$store.commit('questionLength'))
 
       })
 

@@ -6,10 +6,9 @@
       <el-button type="warning" @click="reset">重置</el-button>
     </div>
     <div style="margin: 10px 0;float: left">
-      <el-upload :action="'http://' + serverIp +':9090/file/upload'" :show-file-list="false"
-                 :on-success="handleFileUploadSuccess" style="display: inline-block">
-        <el-button type="primary" class="ml-5">上传文件 <i class="el-icon-top"></i></el-button>
-      </el-upload>
+      <button type="button" class="btn btn-info btn-new" @click="handleAdd">新增
+        <i class="el-icon-circle-plus-outline"></i>
+      </button>
       <el-popconfirm
           class="ml-5"
           confirm-button-text='确定'
@@ -27,27 +26,24 @@
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="name" label="文件名称"></el-table-column>
-      <el-table-column prop="type" label="文件类型"></el-table-column>
-      <el-table-column prop="size" label="文件大小(kb)"></el-table-column>
-      <el-table-column label="预览">
-        <template slot-scope="scope">
-          <el-button type="primary" @click="preview(scope.row.url)">预览</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column label="下载">
-        <template slot-scope="scope">
-          <el-button type="primary" @click="download(scope.row.url)">下载</el-button>
-        </template>
-      </el-table-column>
+      <el-table-column prop="name" label="标签名称"></el-table-column>
+
       <el-table-column label="启用">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.enable" active-color="#13ce66" inactive-color="#ccc"
+          <el-switch v-model="scope.row.state" active-color="#13ce66" inactive-color="#ccc"
                      @change="changeEnable(scope.row)"></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200" align="center">
+      <el-table-column label="操作" width="400" align="center">
+
+
         <template slot-scope="scope">
+          <button type="button"
+                  class="btn btn-success btn-operate "
+                  style="color: white"
+                  @click="handleEdit(scope.row)">
+            编辑 <i class="el-icon-edit"></i>
+          </button>
           <el-popconfirm
               class="ml-5"
               confirm-button-text='确定'
@@ -75,6 +71,19 @@
       </el-pagination>
     </div>
 
+    <el-dialog title="标签信息" :visible.sync="dialogFormVisible" width="35%">
+      <el-form label-width="80px" size="small">
+        <el-form-item label="名称">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false" style="width: 70px;height: 30px;float: left">取 消</el-button>
+        <el-button type="primary" @click="save" style="width: 70px;height: 30px">确 定</el-button>
+      </div>
+    </el-dialog>
+
+
   </div>
 </template>
 
@@ -83,9 +92,10 @@ import request from "@/utils/request";
 import {serverIp} from "../../../../public/config";
 
 export default {
-  name: "File",
+  name: "Tag",
   data(){
     return {
+      form:{},
       serverIp: serverIp,
       tableData:[],
       name:'',
@@ -93,15 +103,37 @@ export default {
       pageSize:10,
       pageNum:1,
       total:0,
+      dialogFormVisible:false,
     }
   },
   created() {
     this.load()
   },
   methods:{
+    save(){
+      request.post("/tag",this.form).then(res=>{
+        if(res.code==='200'){
+          this.$message({
+            message: '恭喜你，保存成功',
+            type: 'success'
+          });
+          this.dialogFormVisible=false
+          this.load()
+        }else{
+          this.$message({
+            message: '抱歉，保存失败',
+            type: 'warning'
+          });
+        }
+      })
+    },
+    handleEdit(row){
+      this.form=row
+      this.dialogFormVisible=true
+    },
     load(){
 
-      request.get("/file/page", {
+      request.get("/tag/page", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
@@ -128,7 +160,7 @@ export default {
       this.load()
     },
     del(id){
-      request.delete("/file/"+id).then(res=>{
+      request.delete("/tag/"+id).then(res=>{
         if(res.code === '200'){
           this.$message({
             message: '恭喜你，删除成功',
@@ -144,7 +176,7 @@ export default {
       })
     },
     changeEnable(row) {
-      this.request.post("/file/update", row).then(res => {
+      this.request.post("/tag/update", row).then(res => {
         if (res.code === '200') {
           this.$message.success("操作成功")
         }
@@ -155,7 +187,7 @@ export default {
     },
     delBatch(){
       let ids=this.multipleSelection.map(v=>v.id)
-      request.post("/file/del/batch",ids).then(res=> {
+      request.post("/tag/del/batch",ids).then(res=> {
         if (res.code === '200') {
           this.$message({
             message: '恭喜你，批量删除成功',
@@ -170,16 +202,10 @@ export default {
         }
       })
     },
-    handleFileUploadSuccess(res) {
-      console.log(res)
-      this.$message.success("上传成功")
-      this.load()
-    },
-    download(url) {
-      window.open(url)
-    },
-    preview(url) {
-      window.open('https://file.keking.cn/onlinePreview?url=' + encodeURIComponent(window.btoa((url))))
+
+    handleAdd(){
+      this.dialogFormVisible=true
+      this.form={}
     },
 
   }

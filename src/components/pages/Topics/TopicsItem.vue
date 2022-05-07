@@ -139,6 +139,8 @@ export default {
 
         this.tableData = res.data.records
         this.total = res.data.total
+        console.log(this.tableData)
+        console.log(this.total)
 
 
       })

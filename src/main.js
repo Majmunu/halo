@@ -2,6 +2,7 @@
 import Vue from 'vue';
 //引入App
 import App from './App.vue';
+import store from "@/store";
 import 'bootstrap';
 import $ from 'jquery';
 //引入饿了么组件库
@@ -44,6 +45,7 @@ Vue.use(Share)
 new Vue({
   render: h => h(App),
   router:router,
+  store,
   beforeCreate() {
     Vue.prototype.$bus = this // 安装全局事件总线，$bus 就是当前应用的 vm
   }
