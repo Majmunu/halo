@@ -43,21 +43,18 @@
         </el-menu>
       </el-col>
     </el-row>-->
-    <Menu active-name="1-2" :open-names="['1']">
+    <Menu  :open-names="['1']">
       <Submenu name="1">
         <template slot="title">
           推荐
         </template>
-          <MenuItem name="1-1">Option 1</MenuItem>
-          <MenuItem name="1-2">Option 2</MenuItem>
-          <MenuItem name="1-3">Option 3</MenuItem>
-          <MenuItem name="1-4">Option 4</MenuItem>
+
       </Submenu>
       <Submenu name="2">
         <template slot="title">
          🚀热门
         </template>
-        <MenuItem name="2-1">Option 5</MenuItem>
+        <MenuItem name="2-1"><button @click="red(2)">今日热门</button></MenuItem>
         <MenuItem name="2-2">Option 6</MenuItem>
       </Submenu>
       <Submenu name="3">
@@ -69,68 +66,68 @@
         <MenuItem name="4-3">Option 11</MenuItem>
         <MenuItem name="4-4">Option 12</MenuItem>
       </Submenu>
-      <Submenu name="1">
+      <Submenu name="4">
         <template slot="title">
           好物
         </template>
-        <MenuItem name="1-1">Option 1</MenuItem>
-        <MenuItem name="1-2">Option 2</MenuItem>
-        <MenuItem name="1-3">Option 3</MenuItem>
-        <MenuItem name="1-4">Option 4</MenuItem>
+        <MenuItem name="5-1">Option 1</MenuItem>
+        <MenuItem name="5-2">Option 2</MenuItem>
+        <MenuItem name="5-3">Option 3</MenuItem>
+        <MenuItem name="5-4">Option 4</MenuItem>
       </Submenu>
-      <Submenu name="1">
+      <Submenu name="5">
         <template slot="title">
          玩机
         </template>
-        <MenuItem name="1-1">Option 1</MenuItem>
-        <MenuItem name="1-2">Option 2</MenuItem>
-        <MenuItem name="1-3">Option 3</MenuItem>
-        <MenuItem name="1-4">Option 4</MenuItem>
+        <MenuItem name="6-1">Option 1</MenuItem>
+        <MenuItem name="6-2">Option 2</MenuItem>
+        <MenuItem name="6-3">Option 3</MenuItem>
+        <MenuItem name="6-4">Option 4</MenuItem>
       </Submenu>
-      <Submenu name="1">
+      <Submenu name="6">
         <template slot="title">
           安卓
         </template>
-        <MenuItem name="1-1">Option 1</MenuItem>
-        <MenuItem name="1-2">Option 2</MenuItem>
-        <MenuItem name="1-3">Option 3</MenuItem>
-        <MenuItem name="1-4">Option 4</MenuItem>
+        <MenuItem name="7-1">Option 1</MenuItem>
+        <MenuItem name="7-2">Option 2</MenuItem>
+        <MenuItem name="7-3">Option 3</MenuItem>
+        <MenuItem name="7-4">Option 4</MenuItem>
       </Submenu>
-      <Submenu name="1">
+      <Submenu name="7">
         <template slot="title">
           游戏
         </template>
-        <MenuItem name="1-1">Option 1</MenuItem>
-        <MenuItem name="1-2">Option 2</MenuItem>
-        <MenuItem name="1-3">Option 3</MenuItem>
-        <MenuItem name="1-4">Option 4</MenuItem>
+        <MenuItem name="8-1">Option 1</MenuItem>
+        <MenuItem name="8-2">Option 2</MenuItem>
+        <MenuItem name="8-3">Option 3</MenuItem>
+        <MenuItem name="8-4">Option 4</MenuItem>
       </Submenu>
-      <Submenu name="1">
+      <Submenu name="8">
         <template slot="title">
           苹果
         </template>
-        <MenuItem name="1-1">Option 1</MenuItem>
-        <MenuItem name="1-2">Option 2</MenuItem>
-        <MenuItem name="1-3">Option 3</MenuItem>
-        <MenuItem name="1-4">Option 4</MenuItem>
+        <MenuItem name="9-1">Option 1</MenuItem>
+        <MenuItem name="9-2">Option 2</MenuItem>
+        <MenuItem name="9-3">Option 3</MenuItem>
+        <MenuItem name="9-4">Option 4</MenuItem>
       </Submenu>
-      <Submenu name="1">
+      <Submenu name="9">
         <template slot="title">
           微软
         </template>
-        <MenuItem name="1-1">Option 1</MenuItem>
-        <MenuItem name="1-2">Option 2</MenuItem>
-        <MenuItem name="1-3">Option 3</MenuItem>
-        <MenuItem name="1-4">Option 4</MenuItem>
+        <MenuItem name="10-1">Option 1</MenuItem>
+        <MenuItem name="10-2">Option 2</MenuItem>
+        <MenuItem name="10-3">Option 3</MenuItem>
+        <MenuItem name="10-4">Option 4</MenuItem>
       </Submenu>
-      <Submenu name="1">
+      <Submenu name="10">
         <template slot="title">
           美化
         </template>
-        <MenuItem name="1-1">Option 1</MenuItem>
-        <MenuItem name="1-2">Option 2</MenuItem>
-        <MenuItem name="1-3">Option 3</MenuItem>
-        <MenuItem name="1-4">Option 4</MenuItem>
+        <MenuItem name="11-1">Option 1</MenuItem>
+        <MenuItem name="11-2">Option 2</MenuItem>
+        <MenuItem name="11-3">Option 3</MenuItem>
+        <MenuItem name="11-4">Option 4</MenuItem>
       </Submenu>
     </Menu>
 
@@ -141,12 +138,22 @@
 <script>
 export default {
   name: "theSidebarNavigation",
+  data(){
+    return{
+      typeid:''
+    }
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    red(){
+      this.typeid=2
+      this.$bus.$emit('hello',this.typeid)
+      console.log("start",this.typeid)
     }
   }
 }

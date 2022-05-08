@@ -18,6 +18,7 @@
                     @click="$router.push('/rebang/tiezi?id=' + item.id)"
                 ><!--文章标题-->
                   {{item.name}}
+                  {{item.typeid}}
                 </div>
 
                 <div
@@ -92,16 +93,27 @@ export default {
       content: '',
       viewDialogVis: false,
       article: {},
-      AComments:[]
+      comments:[],
+      typeid:''
 
     }},
   created() {
 
     this.load()
     this.loadArticle()
+    this.loadComment()
+
+  },mounted() {
+    this.$bus.$on("hello", (data) => {
+      console.log("我是School组件，收到了数据"+data);
+      this.typeid=data
+      this.load()
+    });
+
 
   },
   methods:{
+
     showArticle(){
       this.$router.push({
         name:'tiezi'
@@ -133,15 +145,13 @@ export default {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
+          typeid: this.typeid,
           name: this.name,
         }
       }).then(res => {
 
         this.tableData = res.data.records
         this.total = res.data.total
-        console.log(this.tableData)
-        console.log(this.total)
-
 
       })
 
@@ -150,8 +160,10 @@ export default {
 
       this.request.get("/article/"+id).then(res => {
         this.article = res.data
+        console.log( "111"+this.article)
       })
     },
+
     changeEnable(row) {
       this.request.post("/article/update", row).then(res => {
         if (res.code === '200') {
@@ -223,9 +235,7 @@ export default {
     download(url) {
       window.open(url)
     },
-    AComments(comments){
-   console.log(comments)
-    }
+
   },
 
 }

@@ -295,6 +295,7 @@
 
           this.request.get("/comment/tree/"+this.id).then(res => {
             this.comments = res.data
+            console.log(this.comments)
           })
         },
         changeEnable(row) {

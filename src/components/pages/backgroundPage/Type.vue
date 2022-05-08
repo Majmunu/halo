@@ -1,9 +1,7 @@
 <template>
   <div>
-    <div style="float: left;margin: 10px 0">
+    <div style="margin: 10px 0;float: left">
       <el-input style="width: 200px" placeholder="请输入名称" suffix-icon="el-icon-search" v-model="name"></el-input>
-      <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入分类名称" v-model="typeid">
-      </el-input>
       <el-button class="ml-5" type="primary" @click="load">搜索</el-button>
       <el-button type="warning" @click="reset">重置</el-button>
     </div>
@@ -26,18 +24,9 @@
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="name" label="文章标题"></el-table-column>
-      <el-table-column prop="content" label="文章内容">
-        <template slot-scope="scope">
-          <el-button @click="view(scope.row.content)" type="primary">查看内容</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column prop="user" label="发布人"></el-table-column>
-      <el-table-column prop="type" label="文章所属分类"></el-table-column>
-      <el-table-column prop="typeid" label="文章所属分类"></el-table-column>
-      <el-table-column prop="time" label="发布时间"></el-table-column>
+      <el-table-column prop="name" label="分类名称"></el-table-column>
       <el-table-column label="操作" width="280" align="center">
-        <template slot-scope="scope">
+        <template v-slot="scope">
           <el-button type="success" @click="handleEdit(scope.row)" v-if="user.role === 'ROLE_ADMIN'">编辑 <i class="el-icon-edit"></i></el-button>
           <el-popconfirm
               class="ml-5"
@@ -66,69 +55,18 @@
       </el-pagination>
     </div>
 
-    <el-dialog title="文章信息" :visible.sync="dialogFormVisible" width="60%" >
+    <el-dialog title="标签信息" :visible.sync="dialogFormVisible" width="35%">
       <el-form label-width="80px" size="small">
-        <el-form-item label="文章标题">
+        <el-form-item label="名称">
           <el-input v-model="form.name" autocomplete="off"></el-input>
-        </el-form-item>
-
-        <el-form-item label="文章分类">
-          <el-select clearable v-model="form.typeId" placeholder="请选择" style="width: 100%">
-            <el-option v-for="item in TypeData" :key="item.name" :label="item.name" :value="item.id">
-              {{ item.name }}
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="文章标签">
-          <el-tag
-              :key="tag"
-              v-for="tag in dynamicTags"
-              closable
-              :disable-transitions="false"
-              @close="handleClose(tag)">
-            {{tag}}
-          </el-tag>
-          <el-input
-              class="input-new-tag"
-              v-if="inputVisible"
-              v-model="inputValue"
-              ref="saveTagInput"
-              size="small"
-              @keyup.enter.native="handleInputConfirm"
-              @blur="handleInputConfirm"
-          >
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-
-        </el-form-item>
-
-        <el-form-item label="文章内容">
-          <mavon-editor ref="md" v-model="form.content" :ishljs="true" @imgAdd="imgAdd"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="save">确 定</el-button>
+        <el-button @click="dialogFormVisible = false" style="width: 70px;height: 30px;float: left">取 消</el-button>
+        <el-button type="primary" @click="save" style="width: 70px;height: 30px">确 定</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog title="文章信息" :visible.sync="viewDialogVis" width="60%" >
-      <el-card>
-        <div>
-          <mavon-editor
-              class="md"
-              :value="content"
-              :subfield="false"
-              :defaultOpen="'preview'"
-              :toolbarsFlag="false"
-              :editable="false"
-              :scrollStyle="true"
-              :ishljs="true"
-          />
-        </div>
-      </el-card>
-    </el-dialog>
 
   </div>
 </template>
@@ -137,9 +75,10 @@
 
 import axios from "axios";
 import {serverIp} from "../../../../public/config";
+import request from "@/utils/request";
 
 export default {
-  name: "Article",
+  name: "Question",
   data() {
     return {
       form: {},
@@ -153,47 +92,19 @@ export default {
       teachers: [],
       user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
       content: '',
-      viewDialogVis: false,
-      dynamicTags: [],
-      inputVisible: false,
-      inputValue: '',
-      TypeData:[],
-      typeId:'',
-      type:'',
-      typeid:''
+      viewDialogVis: false
     }
   },
   created() {
     this.load()
-    this.loadType()
   },
   methods: {
-    view(content) {
-      this.content = content
-      this.viewDialogVis = true
-    },
-    // 绑定@imgAdd event
-    imgAdd(pos, $file) {
-      let $vm = this.$refs.md
-      // 第一步.将图片上传到服务器.
-      const formData = new FormData();
-      formData.append('file', $file);
-      axios({
-        url: "http://" + serverIp + ":9090/file/upload",
-        method: 'post',
-        data: formData,
-        headers: {'Content-Type': 'multipart/form-data'},
-      }).then((res) => {
-        // 第二步.将返回的url替换到文本原位置![...](./0) -> ![...](url)
-        $vm.$img2Url(pos, res.data);
-      })
-    },
+
     load() {
-      this.request.get("/article/page", {
+      this.request.get("/type/page", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
-          typeid: this.typeid,
           name: this.name,
         }
       }).then(res => {
@@ -204,18 +115,8 @@ export default {
       })
 
     },
-    loadType() {
-      this.request.get("/type").then(res => {
-
-        this.TypeData = res.data
-        console.log(this.TypeData)
-
-
-      })
-
-    },
     changeEnable(row) {
-      this.request.post("/article/update", row).then(res => {
+      this.request.post("/type/update", row).then(res => {
         if (res.code === '200') {
           this.$message.success("操作成功")
         }
@@ -230,7 +131,7 @@ export default {
       this.dialogFormVisible = true
     },
     del(id) {
-      this.request.delete("/article/" + id).then(res => {
+      this.request.delete("/type/" + id).then(res => {
         if (res.code === '200') {
           this.$message.success("删除成功")
           this.load()
@@ -245,7 +146,7 @@ export default {
     },
     delBatch() {
       let ids = this.multipleSelection.map(v => v.id)  // [{}, {}, {}] => [1,2,3]
-      this.request.post("/article/del/batch", ids).then(res => {
+      this.request.post("/type/del/batch", ids).then(res => {
         if (res.code === '200') {
           this.$message.success("批量删除成功")
           this.load()
@@ -255,7 +156,7 @@ export default {
       })
     },
     save() {
-      this.request.post("/article", this.form).then(res => {
+      this.request.post("/type", this.form).then(res => {
         if (res.code === '200') {
           this.$message.success("保存成功")
           this.dialogFormVisible = false
@@ -267,7 +168,6 @@ export default {
     },
     reset() {
       this.name = ""
-      this.typeid=""
       this.load()
     },
     handleSizeChange(pageSize) {
@@ -283,43 +183,10 @@ export default {
     download(url) {
       window.open(url)
     },
-    handleClose(tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-    },
-
-    showInput() {
-      this.inputVisible = true;
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
-    },
-
-    handleInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        this.dynamicTags.push(inputValue);
-      }
-      this.inputVisible = false;
-      this.inputValue = '';
-    }
   }
 }
 </script>
 
 <style scoped>
-.el-tag + .el-tag {
-  margin-left: 10px;
-}
-.button-new-tag {
-  margin-left: 10px;
-  height: 32px;
-  line-height: 30px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-.input-new-tag {
-  width: 90px;
-  margin-left: 10px;
-  vertical-align: bottom;
-}
+
 </style>
