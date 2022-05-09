@@ -4,21 +4,24 @@
 
 
       <List item-layout="vertical" class="clearfix">
-
         <el-card class="box-card">
           <Tabs type="card">
-            <TabPane label="今日热门">
+            <TabPane label="今日热门"
+                     class="list"
+                     v-infinite-scroll="loadpage"
+                     infinite-scroll-disabled="disabled">
+
               <ListItem
                   v-for="item in tableData"
                   :key="item.id"
-                  class="test"
+                  class="test infinite-list-item"
               >
                 <div
                     style="font-size: 1.25rem;text-align: left;margin-left: 13px;padding-bottom: 1rem;font-weight: 500;color: rgba(33,37,41)!important;"
                     @click="$router.push('/rebang/tiezi?id=' + item.id)"
                 ><!--文章标题-->
                   {{item.name}}
-                  {{item.typeid}}
+
                 </div>
 
                 <div
@@ -55,6 +58,8 @@
                        @click="showArticle">
                 </template>-->
               </ListItem>
+              <p v-if="loading">加载中...</p>
+              <p v-if="noMore">没有更多了</p>
             </TabPane>
             <TabPane label="最新发布">最新发布</TabPane>
             <TabPane label="最高热度">最高热度</TabPane>
@@ -80,12 +85,14 @@ export default {
   },
   data () {
     return {
+      count: 10,
+      loading: false,
       form: {},
       tableData: [],
       name: '',
       multipleSelection: [],
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 20,
       total: 0,
       dialogFormVisible: false,
       teachers: [],
@@ -112,7 +119,23 @@ export default {
 
 
   },
+  computed: {
+    noMore () {
+      return this.tableData >= 10
+    },
+    disabled () {
+      return this.loading || this.noMore
+    }
+  },
   methods:{
+
+    loadpage () {
+      this.loading = true
+      setTimeout(() => {
+        this.tableData += 2
+        this.loading = false
+      }, 2000)
+    },
 
     showArticle(){
       this.$router.push({
@@ -141,6 +164,7 @@ export default {
       })
     },
     load() {
+
       this.request.get("/article/page", {
         params: {
           pageNum: this.pageNum,

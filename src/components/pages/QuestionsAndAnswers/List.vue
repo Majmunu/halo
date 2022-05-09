@@ -10,13 +10,14 @@
         <el-card class="box-card card">
 
           <Tabs type="card">
-            <TabPane label="最新">
+            <TabPane label="最新" class="infinite-list-wrapper" style="overflow:auto">
 
-              <ul
-                  class="list list-group list-group-flush"
+              <ul class="list list-group list-group-flush"
                   v-infinite-scroll="loadPage"
                   infinite-scroll-immediate="false"
-                  infinite-scroll-disabled="disabled">
+                  infinite-scroll-disabled="disabled"
+              >
+
 <!--                <li class="list-group-item">An item</li>
                 <li class="list-group-item">A second item</li>
                 <li class="list-group-item">A third item</li>
@@ -105,7 +106,7 @@ export default {
       name: '',
       multipleSelection: [],
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 100,
       total: 0,
       dialogFormVisible: false,
       teachers: [],

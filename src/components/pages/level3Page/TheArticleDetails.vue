@@ -329,7 +329,7 @@
         },
 
         saveComment() {
-          if (!this.user.username) {
+          if (!this.user.id) {
             this.$message.warning("请登录后操作")
 
             return

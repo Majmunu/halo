@@ -53,6 +53,15 @@
       <el-form-item label="文章标题">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
+
+      <el-form-item label="文章分类">
+        <el-select clearable v-model="form.typeid" placeholder="请选择" style="width: 100%">
+          <el-option v-for="item in TypeData" :key="item.name" :label="item.name" :value="item.id">
+            {{ item.name }}
+          </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="文章内容">
         <mavon-editor ref="md" v-model="form.content" :ishljs="true" @imgAdd="imgAdd"/>
       </el-form-item>
@@ -97,11 +106,16 @@ export default {
       dialogFormVisible: false,
       user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
       content: '',
-      viewDialogVis: false
+      viewDialogVis: false,
+      typeId:'',
+      type:'',
+      typeid:'',
+      TypeData:[]
     }
   },
   created() {
     this.load()
+    this.loadType()
   },
   methods: {
     view(content) {
@@ -128,6 +142,7 @@ export default {
       this.request.get("/article/page", {
         params: {
           pageNum: this.pageNum,
+          typeid: this.typeid,
           pageSize: this.pageSize,
           name: this.name,
         }
@@ -135,6 +150,15 @@ export default {
 
         this.tableData = res.data.records
         this.total = res.data.total
+
+      })
+
+    },
+    loadType() {
+      this.request.get("/type").then(res => {
+
+        this.TypeData = res.data
+        console.log(this.TypeData)
 
       })
 

@@ -24,7 +24,12 @@
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="ID" width="80"></el-table-column>
-      <el-table-column prop="name" label="分类名称"></el-table-column>
+      <el-table-column prop="typename" label="分类名称"></el-table-column>
+      <el-table-column  label="查看文章">
+        <template v-slot="scope">
+        <el-button type="primary" @click="lookArticle(scope.row.articles)" v-if="user.role === 'ROLE_ADMIN'">查看文章 <i class="el-icon-edit"></i></el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="280" align="center">
         <template v-slot="scope">
           <el-button type="success" @click="handleEdit(scope.row)" v-if="user.role === 'ROLE_ADMIN'">编辑 <i class="el-icon-edit"></i></el-button>
@@ -58,7 +63,7 @@
     <el-dialog title="标签信息" :visible.sync="dialogFormVisible" width="35%">
       <el-form label-width="80px" size="small">
         <el-form-item label="名称">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+          <el-input v-model="form.typename" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -67,7 +72,22 @@
       </div>
     </el-dialog>
 
+    <el-dialog title="分类文章" :visible.sync="vis" width="35%">
+      <el-table :data="articles" border stripe>
+        <el-table-column prop="name" label="文章名称">
 
+        </el-table-column>
+
+        <el-table-column prop="user" label="发布人">
+
+        </el-table-column>
+
+        <el-table-column prop="time" label="发布时间">
+
+        </el-table-column>
+
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -81,6 +101,7 @@ export default {
   name: "Question",
   data() {
     return {
+      typename:'',
       form: {},
       tableData: [],
       name: '',
@@ -92,20 +113,26 @@ export default {
       teachers: [],
       user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
       content: '',
-      viewDialogVis: false
+      viewDialogVis: false,
+      articles:[],
+      vis:false
     }
   },
   created() {
     this.load()
   },
   methods: {
+    lookArticle(articles){
+      this.articles=articles
+      this.vis=true
+    },
 
     load() {
       this.request.get("/type/page", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
-          name: this.name,
+          typename: this.typename,
         }
       }).then(res => {
 
@@ -167,7 +194,7 @@ export default {
       })
     },
     reset() {
-      this.name = ""
+      this.typename = ""
       this.load()
     },
     handleSizeChange(pageSize) {

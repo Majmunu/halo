@@ -73,7 +73,7 @@
         </el-form-item>
 
         <el-form-item label="文章分类">
-          <el-select clearable v-model="form.typeId" placeholder="请选择" style="width: 100%">
+          <el-select clearable v-model="form.typeid" placeholder="请选择" style="width: 100%">
             <el-option v-for="item in TypeData" :key="item.name" :label="item.name" :value="item.id">
               {{ item.name }}
             </el-option>

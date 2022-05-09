@@ -46,7 +46,7 @@
     <Menu  :open-names="['1']">
       <Submenu name="1">
         <template slot="title">
-          推荐
+          <button @click="green">推荐</button>
         </template>
 
       </Submenu>
@@ -54,8 +54,13 @@
         <template slot="title">
          🚀热门
         </template>
-        <MenuItem name="2-1"><button @click="red(2)">今日热门</button></MenuItem>
-        <MenuItem name="2-2">Option 6</MenuItem>
+        <MenuItem name="2-1"><button @click="red">今日热点</button></MenuItem>
+        <MenuItem name="2-2"><button @click="phone">手机摄影</button></MenuItem>
+        <MenuItem name="2-3"><button @click="co">电脑玩家</button></MenuItem>
+        <MenuItem name="2-4"><button @click="an">安卓日常</button></MenuItem>
+        <MenuItem name="2-5"><button @click="google">谷歌相机</button></MenuItem>
+        <MenuItem name="2-6"><button @click="hua">
+          花里胡哨又好看的手机</button></MenuItem>
       </Submenu>
       <Submenu name="3">
         <template slot="title">
@@ -154,7 +159,37 @@ export default {
       this.typeid=2
       this.$bus.$emit('hello',this.typeid)
       console.log("start",this.typeid)
-    }
+    },
+    green(){
+      this.typeid=''
+      this.$bus.$emit('hello',this.typeid)
+      console.log("start",this.typeid)
+    },
+    phone(){
+      this.typeid='3'
+      this.$bus.$emit('hello',this.typeid)
+      console.log("start",this.typeid)
+    },
+   co(){
+      this.typeid='4'
+      this.$bus.$emit('hello',this.typeid)
+      console.log("start",this.typeid)
+    },
+    an(){
+      this.typeid='5'
+      this.$bus.$emit('hello',this.typeid)
+      console.log("start",this.typeid)
+    },
+    google(){
+      this.typeid='6'
+      this.$bus.$emit('hello',this.typeid)
+      console.log("start",this.typeid)
+    },
+    hua(){
+      this.typeid='7'
+      this.$bus.$emit('hello',this.typeid)
+      console.log("start",this.typeid)
+    },
   }
 }
 </script>
@@ -164,7 +199,10 @@ export default {
  float: left;
   background-color: white;
 
-
-
+}
+button{
+  background:transparent;	/*按钮背景透明*/
+  border-width:0;	/*边框透明*/
+  outline:none;	/*点击后没边框*/
 }
 </style>
