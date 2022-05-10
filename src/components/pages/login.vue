@@ -10,7 +10,84 @@
           <strong>登录</strong>
         </div>
       </div>
-      <div class="input">
+      <Tabs>
+        <TabPane label="账号登陆" icon="ios-contact-outline" size="30">
+          <div class="input">
+            <Form :rules="ruleValidate"  ref="userForm" :model="user">
+              <FormItem  prop="username" :border="false">
+                <Input v-model="user.username" :border="false" placeholder="用户名" />
+              </FormItem>
+              <Divider />
+              <FormItem  prop="password" :border="false">
+                <Input  v-model="user.password" type="password" :border="false" password placeholder="输入密码" />
+              </FormItem>
+              <Divider />
+              <div style="display: flex">
+                <el-input prefix-icon="el-icon-key" v-model="user.validCode" style="width: 50%" placeholder="请输入验证码"></el-input>
+                <ValidCode style="margin-left: 20px" @input="createValidCode"/>
+              </div>
+
+            </Form>
+            <div style="float: left">
+              <div class="text" style="margin-top: 10px">
+                没有账户？<router-link to="/register">创建一个</router-link>
+              </div>
+              <div class="text"  @click="handleRender">
+                <span class="span-line">无法访问您的账户?</span>
+              </div>
+            </div>
+
+            <div class="button" style="float: right;margin-top: 10px">
+
+              <button type="button" class="btn btn-secondary" to="/home">后退</button>
+              <button type="button" class="btn btn-success" @click="login">登录</button>
+
+
+            </div>
+
+          </div>
+        </TabPane>
+        <TabPane label="邮箱登录" icon="ios-mail-outline">
+          <div class="input">
+            <Form :rules="ruleValidate"  ref="userForm" :model="user">
+              <FormItem  prop="email" :border="false">
+                <Input v-model="user.email" :border="false" placeholder="请输入邮箱" />
+              </FormItem>
+              <Divider />
+              <FormItem  prop="code" :border="false">
+                <Input  v-model="user.code" type="number" style="width: 200px;float: left"  placeholder="输入验证码" />
+              <el-button style="text-align: center; width: 120px" type="primary" @click="sendEmailCode(1)">获取验证码</el-button>
+              </FormItem>
+              <Divider />
+<!--              <div style="display: flex">
+                <el-input prefix-icon="el-icon-key" v-model="user.validCode" style="width: 50%" placeholder="请输入验证码"></el-input>
+                <ValidCode @input="createValidCode"/>
+              </div>-->
+
+            </Form>
+              <div style="float: left">
+                <div class="text">
+                  没有账户？<router-link to="/register">创建一个</router-link>
+                </div>
+                <div class="text"  @click="handleRender">
+                  <span class="span-line">无法访问您的账户?</span>
+                </div>
+              </div>
+
+
+            <div class="button" style="float: right">
+
+              <button type="button" class="btn btn-secondary" to="/halohome">后退</button>
+              <button type="button" class="btn btn-success" @click="loginEmail">登录</button>
+
+
+            </div>
+
+          </div>
+        </TabPane>
+
+      </Tabs>
+<!--      <div class="input">
         <Form :rules="ruleValidate"  ref="userForm" :model="user">
           <FormItem  prop="username" :border="false">
         <Input v-model="user.username" :border="false" placeholder="电子邮件或电话" />
@@ -27,23 +104,27 @@
 
         </Form>
 
-      </div>
-      <div class="text">
-        没有账户？<router-link to="/register">创建一个</router-link>
-      </div>
-      <div class="text">
-        <a href="">无法访问您的账户？</a>
-      </div>
-      <div class="button">
+      </div>-->
 
-        <button type="button" class="btn btn-secondary" to="/home">后退</button>
-        <button type="button" class="btn btn-success" @click="login">登录</button>
-
-
-      </div>
     </div>
-
+    <el-dialog title="重置" :visible.sync="dialogFormVisible" width="34%"  >
+      <el-form label-width="100px" size="small">
+        <el-form-item label="邮箱">
+          <el-input size="medium" v-model="pass.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="验证码">
+          <el-input size="medium"  style="width: 200px" v-model="pass.code"></el-input>
+          <el-button type="primary" size="medium" class="ml-5" @click="sendEmailCode(2)">获取验证码</el-button>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="passwordBack">重置密码</el-button>
+      </div>
+    </el-dialog>
   </el-card>
+
+
 
 </div>
 </template>
@@ -59,13 +140,13 @@ export default {
 
   data(){
     return{
+      pass: {},
+      dialogFormVisible: false,
       validCode:'',
+      value: '',
+      user:{},
+      code:'',
 
-      user:{
-        username: '',
-        password: '',
-
-      },
       ruleValidate: {
         username: [
           { required: true, message: '用户名不能为空', trigger: 'blur' },
@@ -76,10 +157,44 @@ export default {
           { type: 'string', min: 6,max: 32, message: '密码的长度必须是 6-32 位', trigger: 'blur' },
         ],
 
-      }
+
+
+      },
+
     }
   },
   methods:{
+    handleRender () {
+      this.dialogFormVisible = true
+      this.pass = {}
+    },
+    sendEmailCode(type){
+      let email;
+      if (type === 1) {
+        email = this.user.email
+      } else if(type === 2) {
+        email = this.pass.email
+      }
+      if(!email) {
+        this.$message.warning("请输入邮箱账号")
+        return
+      }
+      /*if(!this.user.email){
+        this.$message.warning("请输入邮箱账号")
+        return
+      }*/
+      if(!/^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/.test(email)) {
+        this.$message.warning("请输入正确的邮箱账号")
+        return
+      }
+      this.request.get("/user/email/" + email + "/" + type).then(res => {
+        if (res.code === '200') {
+          this.$message.success("发送成功")
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
     createValidCode(data){
       this.validCode=data
     },
@@ -117,6 +232,50 @@ export default {
         }
       });
 
+    },
+    loginEmail(){
+      if (!this.user.email) {
+        this.$message.warning("请输入邮箱")
+        return
+      }
+      if (!this.user.code) {
+        this.$message.warning("请输入验证码")
+        return
+      }
+      this.$refs['userForm'].validate((valid) => {
+        if (valid) {  // 表单校验合法
+
+
+          request.post("/user/loginEmail",this.user).then(res=>{
+            if(res.code === '200'){
+              localStorage.setItem("user",JSON.stringify(res.data))//存储用户信息到浏览器
+              localStorage.setItem("menus",JSON.stringify(res.data.menus))
+              localStorage.setItem("userId",JSON.stringify(res.data))
+
+              //动态设置当前用户的路由
+              setRoutes()
+              // 重置路由
+
+
+              this.$router.push("/halohome")
+              this.$message.success("登陆成功")
+            }else{
+              this.$message.error(res.msg)
+            }
+          })
+        }
+      });
+
+    },
+    passwordBack() {
+      this.request.put("/user/reset", this.pass).then(res => {
+        if (res.code === '200') {
+          this.$message.success("重置密码成功，新密码为：123456，请尽快修改密码")
+          this.dialogFormVisible = false
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     }
   }
 }
@@ -138,7 +297,7 @@ overflow: hidden;
 .box-card{
 
 
-  margin-top: 200px;
+  margin-top: 130px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -179,11 +338,17 @@ a:hover{
 }
 .button{
   text-align: center;
-  padding-left: 150px;
+
 }
 button{
   margin-left: 10px;
   width: 100px;
 }
+.span-line:hover{
+  text-decoration:underline;
 
+}
+.span-line{
+  color: #2b85e4;
+}
 </style>

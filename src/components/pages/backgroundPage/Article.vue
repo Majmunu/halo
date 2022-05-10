@@ -49,6 +49,7 @@
               @confirm="del(scope.row.id)"
           >
             <el-button type="danger" slot="reference" v-if="user.role === 'ROLE_ADMIN'">删除 <i class="el-icon-remove-outline"></i></el-button>
+
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -74,34 +75,26 @@
 
         <el-form-item label="文章分类">
           <el-select clearable v-model="form.typeid" placeholder="请选择" style="width: 100%">
-            <el-option v-for="item in TypeData" :key="item.name" :label="item.name" :value="item.id">
-              {{ item.name }}
+            <el-option v-for="item in TypeData" :key="item.typename" :label="item.typename" :value="item.id">
+              {{ item.typename }}
             </el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="文章标签">
-          <el-tag
-              :key="tag"
-              v-for="tag in dynamicTags"
-              closable
-              :disable-transitions="false"
-              @close="handleClose(tag)">
-            {{tag}}
-          </el-tag>
-          <el-input
-              class="input-new-tag"
-              v-if="inputVisible"
-              v-model="inputValue"
-              ref="saveTagInput"
-              size="small"
-              @keyup.enter.native="handleInputConfirm"
-              @blur="handleInputConfirm"
-          >
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
 
+        <el-form-item label="文章标签">
+          <template slot-scope="scope">
+          <el-select clearable v-model="tagId" placeholder="请选择" style="width: 100%">
+            <el-option v-for="item in TagData" :key="item.name" :label="item.name" :value="item.id">
+              {{ item.name }}
+
+
+            </el-option>
+          </el-select>
+          </template>
         </el-form-item>
+
+
 
         <el-form-item label="文章内容">
           <mavon-editor ref="md" v-model="form.content" :ishljs="true" @imgAdd="imgAdd"/>
@@ -137,6 +130,7 @@
 
 import axios from "axios";
 import {serverIp} from "../../../../public/config";
+import request from "@/utils/request";
 
 export default {
   name: "Article",
@@ -160,14 +154,28 @@ export default {
       TypeData:[],
       typeId:'',
       type:'',
-      typeid:''
+      typeid:'',
+      TagData:[],
+      tagtotal:[],
+      tagId:''
     }
   },
   created() {
     this.load()
     this.loadType()
+    this.loadTag()
   },
   methods: {
+    selectTag(tagId){
+      request.post("/tag/articleTag" +this.article.id+ "/"+tagId).then(res=>{
+        if (res.code === '200') {
+          this.$message.success("添加成功")
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
+    },
+
     view(content) {
       this.content = content
       this.viewDialogVis = true
@@ -206,10 +214,16 @@ export default {
     },
     loadType() {
       this.request.get("/type").then(res => {
-
         this.TypeData = res.data
-        console.log(this.TypeData)
+        console.log("type"+this.TypeData)
 
+      })
+
+    },
+    loadTag() {
+      this.request.get("/tag").then(res => {
+        this.TagData = res.data
+        console.log("tag"+this.TagData)
 
       })
 
@@ -258,10 +272,25 @@ export default {
       this.request.post("/article", this.form).then(res => {
         if (res.code === '200') {
           this.$message.success("保存成功")
+
           this.dialogFormVisible = false
+          console.log(this.tagId)
+          console.log(this.tableData[0].id)
+
+
           this.load()
         } else {
           this.$message.error("保存失败")
+        }
+      })
+      request.post("/tag/articleTag/" +this.tagId+ "/"+this.tableData[0].id).then(res=>{
+        if (res.code === '200') {
+          this.$message.success("添加成功")
+
+          console.log("wyou")
+
+        }else{
+          this.$message.error(res.msg)
         }
       })
     },
