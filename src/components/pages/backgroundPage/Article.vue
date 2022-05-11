@@ -34,7 +34,7 @@
       </el-table-column>
       <el-table-column prop="user" label="发布人"></el-table-column>
       <el-table-column prop="type" label="文章所属分类"></el-table-column>
-      <el-table-column prop="typeid" label="文章所属分类"></el-table-column>
+<!--      <el-table-column prop="typeid" label="文章所属分类"></el-table-column>-->
       <el-table-column prop="time" label="发布时间"></el-table-column>
       <el-table-column label="操作" width="280" align="center">
         <template slot-scope="scope">

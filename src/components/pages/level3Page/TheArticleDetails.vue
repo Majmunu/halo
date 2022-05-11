@@ -10,6 +10,7 @@
       </div>
       <el-card class="box-card card">
         <h2>{{article.name}}</h2>
+
         <div style="float: right"  v-if="user.nickname === article.user">
 
           <el-button type="success" @click="handleEdit(article)">编辑 <i class="el-icon-edit"></i></el-button>
@@ -289,6 +290,7 @@
 
           this.request.get("/article/"+this.id).then(res => {
             this.article = res.data
+            console.log(this.article)
           })
         },
         loadComment(){

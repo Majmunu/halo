@@ -7,7 +7,7 @@ import 'bootstrap';
 import $ from 'jquery';
 //引入饿了么组件库
 import ElementUI from 'element-ui';
-
+import 'animate.css';
 //引入样式
 import 'element-ui/lib/theme-chalk/index.css'
 import ViewUI from 'view-design';

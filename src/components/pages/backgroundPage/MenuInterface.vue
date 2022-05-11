@@ -61,7 +61,7 @@
     </el-table-column>
     <el-table-column  label="图标" class-name="fontSize18" align="center" label-class-name="fontSize12">
 
-      <template slot-scope="scope">
+      <template v-slot="scope">
         <span :class="scope.row.icon"/>
       </template>
 
@@ -175,6 +175,7 @@ export default {
   created() {
     //请求分页查询数据
     this.load()
+    this.handleEdit(row)
 
   },
   methods:{

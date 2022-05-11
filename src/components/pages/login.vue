@@ -10,7 +10,7 @@
           <strong>登录</strong>
         </div>
       </div>
-      <Tabs>
+      <Tabs v-show=" !dialogFormVisible">
         <TabPane label="账号登陆" icon="ios-contact-outline" size="30">
           <div class="input">
             <Form :rules="ruleValidate"  ref="userForm" :model="user">
@@ -72,6 +72,7 @@
                 <div class="text"  @click="handleRender">
                   <span class="span-line">无法访问您的账户?</span>
                 </div>
+
               </div>
 
 
@@ -107,21 +108,55 @@
       </div>-->
 
     </div>
-    <el-dialog title="重置" :visible.sync="dialogFormVisible" width="34%"  >
-      <el-form label-width="100px" size="small">
-        <el-form-item label="邮箱">
-          <el-input size="medium" v-model="pass.email" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="验证码">
-          <el-input size="medium"  style="width: 200px" v-model="pass.code"></el-input>
-          <el-button type="primary" size="medium" class="ml-5" @click="sendEmailCode(2)">获取验证码</el-button>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="passwordBack">重置密码</el-button>
-      </div>
-    </el-dialog>
+    <transition-group appear
+                      name="animate__animated animate__bounce"
+                      enter-active-class="animate__bounceInDown"
+                      leave-active-class="animate__backOutUp">
+
+
+      <el-dialog  title="重置密码" v-show="dialogFormVisible" width="34%" key="1">
+<!--
+        <div key="1" slot="footer">
+&lt;!&ndash;          <transition-group appear
+          name="animate__animated animate__bounce"
+          enter-active-class="animate__flip"
+          leave-active-class="animate__backOutUp">&ndash;&gt;
+            <el-form-item label="邮箱" >
+              <el-input   size="medium" v-model="pass.email" autocomplete="off"></el-input>
+            </el-form-item>
+            <h1>1213123</h1>
+          <Input  v-model="user.code" type="number" style="width: 200px;float: left"  placeholder="输入验证码" />
+            <el-form-item label="验证码">
+              <el-input size="medium"  style="width: 200px" v-model="pass.code"></el-input>
+              <el-button type="primary" size="medium" class="ml-5" @click="sendEmailCode(2)">获取验证码</el-button>
+            </el-form-item>
+&lt;!&ndash;          </transition-group>&ndash;&gt;
+        </div>-->
+        <Form :rules="ruleValidate"  ref="userForm" :model="user" key="1" slot="footer">
+          <FormItem  prop="email" :border="false">
+            <Input v-model="pass.email"  placeholder="请输入邮箱" />
+          </FormItem>
+          <Divider />
+          <FormItem  prop="code" >
+            <Input  v-model="user.code" type="text" style="width: 200px;float: left"  placeholder="输入验证码" />
+            <el-button style="text-align: center; width: 120px" type="primary" @click="sendEmailCode(2)">获取验证码</el-button>
+          </FormItem>
+
+          <!--              <div style="display: flex">
+                          <el-input prefix-icon="el-icon-key" v-model="user.validCode" style="width: 50%" placeholder="请输入验证码"></el-input>
+                          <ValidCode @input="createValidCode"/>
+                        </div>-->
+
+        </Form>
+
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="passwordBack">重置密码</el-button>
+        </div>
+      </el-dialog>
+
+    </transition-group>
+
   </el-card>
 
 
@@ -133,13 +168,14 @@
 import request from "@/utils/request";
 import {setRoutes} from "@/router";
 import ValidCode from "@/components/pages/ValidCode";
-
+import 'animate.css';
 export default {
   name: "login",
   components: {ValidCode},
 
   data(){
     return{
+
       pass: {},
       dialogFormVisible: false,
       validCode:'',
@@ -279,6 +315,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style scoped>

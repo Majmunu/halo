@@ -22,21 +22,25 @@
       <div class="ppsj">
         <h5>🪄品牌刷机🪄</h5>
         <el-row>
-          <el-col :span="8" v-for="(o, index) in 6" :key="o"  class="kc-card">
+          <el-col :span="8" v-for="item in tableData" :key="item.id"  class="kc-card">
             <el-card :body-style="{ padding: '0px' }" class="el-card1">
-              <img src="@/assets/images/course/oppo.jpg" class="image" width="231px" height="130px">
+              <img :src="item.img" class="image" width="231px" height="130px">
               <div style="padding: 14px;">
-                <span>OPPO教程</span>
+                <span>OPPO教程{{item.name}}</span>
 
               </div>
             </el-card>
           </el-col>
         </el-row>
         <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
             class="fenye"
+            :current-page="pageNum"
             background
+            :page-size="pageSize"
             layout="prev, pager, next"
-            :total="60">
+            :total="total">
         </el-pagination>
 
       </div>
@@ -97,6 +101,8 @@
           </el-col>
         </el-row>
         <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
             class="fenye"
             background
             layout="prev, pager, next"
@@ -112,7 +118,7 @@
     </div>
     <!--!教程右侧-->
     <div class="course-right col-xl-5">
-      <el-button type="success">发布教程</el-button>
+      <el-button type="success" @click="handleAdd">发布教程</el-button>
       <!--!今日教程-->
       <el-card class="box-card" :body-style="{ padding: '0px' }">
 
@@ -266,19 +272,133 @@
 
       </el-card>
     </div>
+
+    <el-dialog title="信息" :visible.sync="dialogFormVisible" width="60%" :close-on-click-modal="false">
+      <el-form label-width="100px" size="small" style="width: 90%">
+        <el-form-item label="标题">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="封面">
+          <el-upload
+              class="avatar-uploader"
+              action="http://localhost:9090/file/upload"
+              ref="img"
+              :show-file-list="false"
+              :on-success="handleImgUploadSuccess">
+            <img v-if="form.img" :src="form.img" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="内容">
+          <div id="richText"></div>
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="save">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 
 </template>
 
 <script>
+import E from "wangeditor";
+
+let editor;
 export default {
   name: "CourseHome",
   data() {
     return {
+      id:'',
       currentDate: new Date(),
+      tableData: [],
+      total: 0,
+      pageNum: 1,
+      pageSize: 6,
+      name: "",
+      form: {},
+      dialogFormVisible: false,
+      dialogFormVisible1: false,
+      content: '',
+      multipleSelection: [],
+      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
 
 
     }
+  },created() {
+    this.load()
+  },
+  methods:{
+    load() {
+      this.request.get("/course/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.name,
+          type: 2
+        }
+      }).then(res => {
+        this.tableData = res.data.records
+        this.total = res.data.total
+        console.log(this.tableData)
+      })
+    },
+    save() {
+      const content = editor.txt.html()
+      console.log(content)
+      // 注意：这个地方需要手动赋值
+      this.form.content = content
+      this.form.type = 2
+      this.request.post("/course", this.form).then(res => {
+        if (res.code === '200') {
+          this.$message.success("保存成功")
+          this.dialogFormVisible = false
+          this.load()
+        } else {
+          this.$message.error("保存失败")
+        }
+      })
+    },
+    handleAdd() {
+      this.dialogFormVisible = true
+      this.form = {img: ''}
+      this.$nextTick(() => {
+        if(!editor) {
+          editor = new E("#richText")
+          editor.config.uploadImgServer = 'http://localhost:9090/file/uploadImg'
+          editor.config.uploadFileName = 'file'
+          editor.create()
+        }
+        editor.txt.html('')  // 清除内容
+
+        if(this.$refs.img) {
+          this.$refs.img.clearFiles();
+        }
+        if(this.$refs.file) {
+          this.$refs.file.clearFiles();
+        }
+      })
+    },
+
+    handleSizeChange(pageSize) {
+      console.log(pageSize)
+      this.pageSize = pageSize
+      this.load()
+    },
+    handleCurrentChange(pageNum) {
+      console.log(pageNum)
+      this.pageNum = pageNum
+      this.load()
+    },
+    handleFileUploadSuccess(res) {
+      this.form.file = res
+    },
+    handleImgUploadSuccess(res) {
+      this.form.img = res
+    },
   }
 }
 </script>
