@@ -22,11 +22,14 @@
       <div class="ppsj">
         <h5>🪄品牌刷机🪄</h5>
         <el-row>
-          <el-col :span="8" v-for="item in tableData" :key="item.id"  class="kc-card">
-            <el-card :body-style="{ padding: '0px' }" class="el-card1">
-              <img :src="item.img" class="image" width="231px" height="130px">
+          <el-col :span="8" v-for="item in tableData" :key="item.id" v-on.native="ctype=11" class="kc-card">
+            <el-card :body-style="{ padding: '0px' }"
+                     class="el-card1"
+                     @click="$router.push('/jiaocheng/tcourse?id=' + item.id)"
+            >
+              <img :src="item.img" class="image" width="231px" height="130px" @click="$router.push('/jiaocheng/course?id=' + item.id)">
               <div style="padding: 14px;">
-                <span>OPPO教程{{item.name}}</span>
+                <span>{{item.name}}</span>
 
               </div>
             </el-card>
@@ -48,65 +51,75 @@
       <div class="ppsj">
         <h5>📱手机进阶📱</h5>
         <el-row>
-          <el-col :span="8" v-for="(o, index) in 6" :key="o"  class="kc-card">
+          <el-col :span="8" v-for="item in tableData1" :key="item.id"  class="kc-card">
             <el-card :body-style="{ padding: '0px' }" class="el-card1">
-              <img src="@/assets/images/course/kwgt.jpg" class="image" width="231px" height="130px">
+              <img :src="item.img" class="image" width="231px" height="130px">
               <div style="padding: 14px;">
-                <span>美化教程</span>
+                <span>{{item.name}}</span>
 
               </div>
             </el-card>
           </el-col>
         </el-row>
         <el-pagination
+            @size-change="handleSizeChange1"
+            @current-change="handleCurrentChange1"
             class="fenye"
+            :current-page="pageNum1"
             background
+            :page-size="pageSize1"
             layout="prev, pager, next"
-            :total="60">
+            :total="total1">
         </el-pagination>
       </div>
       <!--!PC卡片-->
       <div class="ppsj">
         <h5>💻PC玩家💻</h5>
         <el-row>
-          <el-col :span="8" v-for="(o, index) in 6" :key="o"  class="kc-card">
+          <el-col :span="8" v-for="item in tableData2" :key="item.id"  class="kc-card">
             <el-card :body-style="{ padding: '0px' }" class="el-card1">
-              <img src="@/assets/images/course/pc.jpg" class="image" width="231px" height="130px">
+              <img :src="item.img" class="image" width="231px" height="130px">
               <div style="padding: 14px;">
-                <span>美化教程</span>
+                <span>{{item.name}}</span>
 
               </div>
             </el-card>
           </el-col>
         </el-row>
         <el-pagination
+            @size-change="handleSizeChange2"
+            @current-change="handleCurrentChange2"
             class="fenye"
+            :current-page="pageNum2"
             background
+            :page-size="pageSize2"
             layout="prev, pager, next"
-            :total="60">
+            :total="total2">
         </el-pagination>
       </div>
       <!--!数码卡片-->
       <div class="ppsj">
         <h5>📸数码生活📸</h5>
         <el-row>
-          <el-col :span="8" v-for="(o, index) in 6" :key="o"  class="kc-card">
+          <el-col :span="8" v-for="item in tableData3" :key="item.id"  class="kc-card">
             <el-card :body-style="{ padding: '0px' }" class="el-card1">
-              <img src="@/assets/images/course/smsh.jpg" class="image" width="231px" height="130px">
+              <img :src="item.img" class="image" width="231px" height="130px">
               <div style="padding: 14px;">
-                <span>美化教程</span>
+                <span>{{item.name}}</span>
 
               </div>
             </el-card>
           </el-col>
         </el-row>
         <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange3"
+            @current-change="handleCurrentChange3"
             class="fenye"
+            :current-page="pageNum3"
             background
+            :page-size="pageSize3"
             layout="prev, pager, next"
-            :total="60">
+            :total="total3">
         </el-pagination>
       </div>
 
@@ -127,10 +140,10 @@
             今日·教程
           </a>
           <a href="#" class="list-group-item list-group-item-action">
-            <div class="media">
-              <img src="@/assets/images/course/shizuku.jpg" class="mr-3" alt="..." width="112px" height="63px">
+            <div class="media" v-for="item in tableData.slice(1,4)">
+              <img :src="item.img" class="mr-3" alt="..." width="112px" height="63px">
               <div class="media-body text-nowrap box">
-                <h6 class="mt-0">小白大众使用shikuzu方法（基于直连）</h6>
+                <h6 class="mt-0">{{ item.name }}</h6>
                 <div class="tag">
                   <Tag color="primary"> 玩机技巧</Tag>
                   <Tag color="success">大佬们&日常</Tag>
@@ -140,34 +153,7 @@
               </div>
             </div>
           </a>
-          <a href="#" class="list-group-item list-group-item-action">
-            <div class="media">
-              <img src="@/assets/images/course/shizuku.jpg" class="mr-3" alt="..." width="112px" height="63px">
-              <div class="media-body text-nowrap box">
-                <h6 class="mt-0">小白大众使用shikuzu方法（基于直连）</h6>
-                <div class="tag">
-                  <Tag color="primary"> 玩机技巧</Tag>
-                  <Tag color="success">大佬们&日常</Tag>
-                  <Tag color="warning">Android那些事</Tag>
-                </div>
 
-              </div>
-            </div>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action">
-            <div class="media">
-              <img src="@/assets/images/course/shizuku.jpg" class="mr-3" alt="..." width="112px" height="63px">
-              <div class="media-body text-nowrap box">
-                <h6 class="mt-0">小白大众使用shikuzu方法（基于直连）</h6>
-                <div class="tag">
-                  <Tag color="primary"> 玩机技巧</Tag>
-                  <Tag color="success">大佬们&日常</Tag>
-                  <Tag color="warning">Android那些事</Tag>
-                </div>
-
-              </div>
-            </div>
-          </a>
         </div>
 
       </el-card>
@@ -178,10 +164,10 @@
             热门·教程
           </a>
           <a href="#" class="list-group-item list-group-item-action">
-            <div class="media">
-              <img src="@/assets/images/course/13.jpg" class="mr-3" alt="..." width="112px" height="63px">
+            <div class="media" v-for="item in tableData1.slice(0,3)">
+              <img :src="item.img" class="mr-3" alt="..." width="112px" height="63px">
               <div class="media-body text-nowrap box">
-                <h6 class="mt-0">硬核沉浸MIUI小白条？</h6>
+                <h6 class="mt-0">{{item.name}}</h6>
                 <div class="tag">
                   <Tag color="primary"> MIUI13</Tag>
                   <Tag color="success">大佬们&日常</Tag>
@@ -191,33 +177,7 @@
               </div>
             </div>
           </a>
-          <a href="#" class="list-group-item list-group-item-action">
-            <div class="media">
-              <img src="@/assets/images/course/13.jpg" class="mr-3" alt="..." width="112px" height="63px">
-              <div class="media-body text-nowrap box">
-                <h6 class="mt-0">硬核沉浸MIUI小白条？</h6>
-                <div class="tag">
-                  <Tag color="primary"> MIUI13</Tag>
-                  <Tag color="success">大佬们&日常</Tag>
-                  <Tag color="warning">全站精选教程</Tag>
-                </div>
 
-              </div>
-            </div>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action">
-            <div class="media">
-              <img src="@/assets/images/course/13.jpg" class="mr-3" alt="..." width="112px" height="63px">
-              <div class="media-body text-nowrap box">
-                <h6 class="mt-0">硬核沉浸MIUI小白条？</h6>
-                <div class="tag">
-                  <Tag color="primary"> MIUI13</Tag>
-                  <Tag color="success">大佬们&日常</Tag>
-                  <Tag color="warning">全站精选教程</Tag>
-                </div>
-              </div>
-            </div>
-          </a>
         </div>
       </el-card>
       <!--@大佬-->
@@ -289,6 +249,15 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
+
+        <el-form-item label="文章分类">
+          <el-select clearable v-model="form.ctype" placeholder="请选择" style="width: 100%">
+            <el-option v-for="item in TypeData" :key="item.typename" :label="item.typename" :value="item.id">
+              {{ item.typename }}
+            </el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="内容">
           <div id="richText"></div>
         </el-form-item>
@@ -315,11 +284,25 @@ export default {
       id:'',
       currentDate: new Date(),
       tableData: [],
+      tableData1: [],
+      tableData2: [],
+      tableData3: [],
       total: 0,
+      total1: 0,
+      total2: 0,
+      total3: 0,
       pageNum: 1,
       pageSize: 6,
+      pageNum1: 1,
+      pageSize1: 6,
+      pageNum2: 1,
+      pageSize2: 6,
+      pageNum3: 1,
+      pageSize3: 6,
       name: "",
       form: {},
+      ctype:'',
+      TypeDate:[],
       dialogFormVisible: false,
       dialogFormVisible1: false,
       content: '',
@@ -330,20 +313,78 @@ export default {
     }
   },created() {
     this.load()
+    this.load1()
+    this.load2()
+    this.load3()
+    this.loadType()
   },
   methods:{
+    loadType() {
+      this.request.get("/type").then(res => {
+        this.TypeData = res.data
+        console.log("type"+this.TypeData)
+
+      })
+
+    },
     load() {
       this.request.get("/course/page", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           name: this.name,
+          ctype:11,
           type: 2
         }
       }).then(res => {
         this.tableData = res.data.records
         this.total = res.data.total
         console.log(this.tableData)
+      })
+    },
+    load1() {
+      this.request.get("/course/page", {
+        params: {
+          pageNum: this.pageNum1,
+          pageSize: this.pageSize1,
+          name: this.name,
+          ctype:12,
+          type: 2
+        }
+      }).then(res => {
+        this.tableData1 = res.data.records
+        this.total1 = res.data.total
+
+      })
+    },
+    load2() {
+      this.request.get("/course/page", {
+        params: {
+          pageNum: this.pageNum2,
+          pageSize: this.pageSize2,
+          name: this.name,
+          ctype:13,
+          type: 2
+        }
+      }).then(res => {
+        this.tableData2 = res.data.records
+        this.total2 = res.data.total
+
+      })
+    },
+    load3() {
+      this.request.get("/course/page", {
+        params: {
+          pageNum: this.pageNum3,
+          pageSize: this.pageSize3,
+          name: this.name,
+          ctype:14,
+          type: 2
+        }
+      }).then(res => {
+        this.tableData3 = res.data.records
+        this.total3 = res.data.total
+
       })
     },
     save() {
@@ -393,6 +434,36 @@ export default {
       this.pageNum = pageNum
       this.load()
     },
+    handleSizeChange1(pageSize) {
+      console.log(pageSize)
+      this.pageSize1 = pageSize
+      this.load1()
+    },
+    handleCurrentChange1(pageNum) {
+      console.log(pageNum)
+      this.pageNum1 = pageNum
+      this.load1()
+    },
+    handleSizeChange2(pageSize) {
+      console.log(pageSize)
+      this.pageSize2 = pageSize
+      this.load2()
+    },
+    handleCurrentChange2(pageNum) {
+      console.log(pageNum)
+      this.pageNum2 = pageNum
+      this.load2()
+    }, handleSizeChange3(pageSize) {
+      console.log(pageSize)
+      this.pageSize3 = pageSize
+      this.load3()
+    },
+    handleCurrentChange3(pageNum) {
+      console.log(pageNum)
+      this.pageNum3 = pageNum
+      this.load3()
+    },
+
     handleFileUploadSuccess(res) {
       this.form.file = res
     },

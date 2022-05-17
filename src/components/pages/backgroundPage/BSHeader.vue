@@ -7,8 +7,9 @@
             </span>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="display: inline-block;margin-left: 20px;">
         <el-breadcrumb-item :to="{ path: '/halohome' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/houtai/user' }">用户管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/houtai/user' }">{{currentPathName}}</el-breadcrumb-item>
       </el-breadcrumb>
+
     </div>
       <div>
 
@@ -47,9 +48,20 @@ export default {
   },
   data(){
     return{
-      paths:[],
+      currentPathName:''
     }
   },
+ /* computed: {
+    currentPathName () {
+      return this.$store.state.currentPathName;　　//需要监听的数据
+    }
+  },*/
+  watch:{
+    '$route':function () {
+      this.currentPathName=localStorage.getItem("currentPathName")
+    }
+  },
+
   methods:{
     collapse(){
       this.$emit("asideCollapse")

@@ -36,9 +36,24 @@
           <el-button type="primary" @click="view(scope.row.content)">查看内容</el-button>
         </template>
       </el-table-column>
+
       <el-table-column prop="time" label="发布时间"></el-table-column>
       <el-table-column prop="user" label="发布人"></el-table-column>
-      <el-table-column label="图片"><template slot-scope="scope"><el-image style="width: 100px; height: 100px" :src="scope.row.img" :preview-src-list="[scope.row.img]"></el-image></template></el-table-column>
+      <el-table-column prop="ctype" label="所属分类"></el-table-column>
+      <el-table-column label="封面图片">
+        <template slot-scope="scope">
+          <el-popover
+              width="200"
+              trigger="hover">
+
+            <el-image  slot="reference" style="width: 40px; height: 40px" :src="scope.row.img" :preview-src-list="[scope.row.img]"></el-image>
+            <el-image style="width: 200px; height: 200px" :src="scope.row.img" :preview-src-list="[scope.row.img]"></el-image>
+          </el-popover>
+
+
+
+        </template>
+      </el-table-column>
 
       <el-table-column label="操作"  width="300" align="center">
         <template slot-scope="scope">
@@ -85,6 +100,17 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
+
+
+        <el-form-item label="文章分类">
+          <el-select clearable v-model="form.ctype" placeholder="请选择" style="width: 100%">
+            <el-option v-for="item in TypeData" :key="item.typename" :label="item.typename" :value="item.id">
+              {{ item.typename }}
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+
         <el-form-item label="内容">
           <div id="richText"></div>
         </el-form-item>
@@ -117,15 +143,18 @@ export default {
       pageSize: 10,
       name: "",
       form: {},
+      TypeData:[],
       dialogFormVisible: false,
       dialogFormVisible1: false,
       content: '',
+      ctype:'',
       multipleSelection: [],
       user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
     }
   },
   created() {
-    this.load()
+    this.judge()
+    this.loadType()
   },
   methods: {
     view(content) {
@@ -138,12 +167,38 @@ export default {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           name: this.name,
+          ctype: this.ctype,
           type: 2
         }
       }).then(res => {
         this.tableData = res.data.records
         this.total = res.data.total
+        console.log(this.tableData)
       })
+    },
+    load1() {
+      this.request.get("/course/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.name,
+          user: this.user.nickname,
+          ctype: this.ctype,
+          type: 2
+        }
+      }).then(res => {
+        this.tableData = res.data.records
+        this.total = res.data.total
+        console.log(this.tableData)
+      })
+    },
+    judge(){
+      if(this.user.role==='ROLE_ADMIN'){
+        this.load()
+      }
+      else {
+        this.load1()
+      }
     },
     save() {
       const content = editor.txt.html()
@@ -155,7 +210,7 @@ export default {
         if (res.code === '200') {
           this.$message.success("保存成功")
           this.dialogFormVisible = false
-          this.load()
+          this.judge()
         } else {
           this.$message.error("保存失败")
         }
@@ -212,7 +267,7 @@ export default {
       this.request.delete("/course/" + id).then(res => {
         if (res.code === '200') {
           this.$message.success("删除成功")
-          this.load()
+          this.judge()
         } else {
           this.$message.error("删除失败")
         }
@@ -231,7 +286,7 @@ export default {
       this.request.post("/course/del/batch", ids).then(res => {
         if (res.code === '200') {
           this.$message.success("批量删除成功")
-          this.load()
+          this.judge()
         } else {
           this.$message.error("批量删除失败")
         }
@@ -239,17 +294,17 @@ export default {
     },
     reset() {
       this.name = ""
-      this.load()
+      this.judge()
     },
     handleSizeChange(pageSize) {
       console.log(pageSize)
       this.pageSize = pageSize
-      this.load()
+      this.judge()
     },
     handleCurrentChange(pageNum) {
       console.log(pageNum)
       this.pageNum = pageNum
-      this.load()
+      this.judge()
     },
     handleFileUploadSuccess(res) {
       this.form.file = res
@@ -259,6 +314,14 @@ export default {
     },
     download(url) {
       window.open(url)
+    },
+    loadType() {
+      this.request.get("/type").then(res => {
+        this.TypeData = res.data
+        console.log("type"+this.TypeData)
+
+      })
+
     },
 
   }

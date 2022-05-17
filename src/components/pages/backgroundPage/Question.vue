@@ -6,7 +6,7 @@
       <el-button type="warning" @click="reset">重置</el-button>
     </div>
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="handleAdd" v-if="user.role === 'ROLE_ADMIN'">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
+      <el-button type="primary" @click="handleAdd" >新增 <i class="el-icon-circle-plus-outline"></i></el-button>
       <el-popconfirm
           class="ml-5"
           confirm-button-text='确定'
@@ -34,7 +34,7 @@
       <el-table-column prop="time" label="发布时间"></el-table-column>
       <el-table-column label="操作" width="280" align="center">
         <template v-slot="scope">
-          <el-button type="success" @click="handleEdit(scope.row)" v-if="user.role === 'ROLE_ADMIN'">编辑 <i class="el-icon-edit"></i></el-button>
+          <el-button type="success" @click="handleEdit(scope.row)" >编辑 <i class="el-icon-edit"></i></el-button>
           <el-popconfirm
               class="ml-5"
               confirm-button-text='确定'
@@ -44,7 +44,7 @@
               title="您确定删除吗？"
               @confirm="del(scope.row.id)"
           >
-            <el-button type="danger" slot="reference" v-if="user.role === 'ROLE_ADMIN'">删除 <i class="el-icon-remove-outline"></i></el-button>
+            <el-button type="danger" slot="reference" >删除 <i class="el-icon-remove-outline"></i></el-button>
           </el-popconfirm>
         </template>
       </el-table-column>
@@ -121,7 +121,7 @@ export default {
     }
   },
   created() {
-    this.load()
+    this.judge()
   },
   methods: {
     view(content) {
@@ -159,6 +159,30 @@ export default {
       })
 
     },
+    load1() {
+      this.request.get("/question/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.name,
+          user:this.user.nickname
+        }
+      }).then(res => {
+
+        this.tableData = res.data.records
+        this.total = res.data.total
+
+      })
+
+    },
+    judge(){
+      if(this.user.role==='ROLE_ADMIN'){
+        this.load()
+      }
+      else {
+        this.load1()
+      }
+    },
     changeEnable(row) {
       this.request.post("/question/update", row).then(res => {
         if (res.code === '200') {
@@ -178,7 +202,7 @@ export default {
       this.request.delete("/question/" + id).then(res => {
         if (res.code === '200') {
           this.$message.success("删除成功")
-          this.load()
+          this.judge()
         } else {
           this.$message.error("删除失败")
         }
@@ -193,7 +217,7 @@ export default {
       this.request.post("/question/del/batch", ids).then(res => {
         if (res.code === '200') {
           this.$message.success("批量删除成功")
-          this.load()
+          this.judge()
         } else {
           this.$message.error("批量删除失败")
         }
@@ -204,7 +228,7 @@ export default {
         if (res.code === '200') {
           this.$message.success("保存成功")
           this.dialogFormVisible = false
-          this.load()
+          this.judge()
         } else {
           this.$message.error("保存失败")
         }
@@ -212,17 +236,17 @@ export default {
     },
     reset() {
       this.name = ""
-      this.load()
+      this.judge()
     },
     handleSizeChange(pageSize) {
       console.log(pageSize)
       this.pageSize = pageSize
-      this.load()
+      this.judge()
     },
     handleCurrentChange(pageNum) {
       console.log(pageNum)
       this.pageNum = pageNum
-      this.load()
+      this.judge()
     },
     download(url) {
       window.open(url)

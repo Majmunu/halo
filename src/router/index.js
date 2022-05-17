@@ -21,6 +21,7 @@ import Register from "@/components/pages/Register";
 import NotFind from "@/components/pages/NotFind";
 import Person from "@/components/pages/backgroundPage/Person";
 import Password from "@/components/pages/backgroundPage/Password";
+import CourseDetail from "@/components/pages/level3Page/CourseDetail";
 
 
 
@@ -103,7 +104,15 @@ const routes =[
             {
                 path:'/jiaocheng',
                 redirect:"/jiaocheng/jchome",
+                meta:{
+                    keepAlive:true
+
+                },
+            },
+            {
+                path:'course',
                 meta:{keepAlive:true},
+                component: CourseDetail
             }
 
         ]
@@ -225,7 +234,14 @@ export const setRoutes=()=>{
 }
 // 重置我就再set一次路由
 setRoutes()
-
+router.beforeEach((to,from,next)=>{
+    //to()  进入目标路由
+    //from()  离开的路由
+    //next()  下一个路由
+    //next({path:"/"})  跳转到某个路由
+    localStorage.setItem("currentPathName",to.name)
+    next();
+});
 
 
 export default router

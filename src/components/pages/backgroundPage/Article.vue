@@ -1,5 +1,12 @@
 <template>
   <div>
+<!--    <div style="position: fixed;border:3px solid red;margin-bottom: 1010px">
+      <el-breadcrumb separator-class="el-icon-arrow-right" style="display: inline-block;margin-left: 20px;">
+        <el-breadcrumb-item :to="{ path: '/halohome' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/user' }">用户管理</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>-->
+
     <div style="float: left;margin: 10px 0">
       <el-input style="width: 200px" placeholder="请输入名称" suffix-icon="el-icon-search" v-model="name"></el-input>
       <el-input style="width: 200px;"  suffix-icon="el-icon-search" placeholder="请输入分类名称" v-model="typeid">
@@ -8,7 +15,7 @@
       <el-button type="warning" @click="reset">重置</el-button>
     </div>
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="handleAdd" v-if="user.role === 'ROLE_ADMIN'">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
+      <el-button type="primary" @click="handleAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
       <el-popconfirm
           class="ml-5"
           confirm-button-text='确定'
@@ -38,7 +45,7 @@
       <el-table-column prop="time" label="发布时间"></el-table-column>
       <el-table-column label="操作" width="280" align="center">
         <template slot-scope="scope">
-          <el-button type="success" @click="handleEdit(scope.row)" v-if="user.role === 'ROLE_ADMIN'">编辑 <i class="el-icon-edit"></i></el-button>
+          <el-button type="success" @click="handleEdit(scope.row)" >编辑 <i class="el-icon-edit"></i></el-button>
           <el-popconfirm
               class="ml-5"
               confirm-button-text='确定'
@@ -48,7 +55,7 @@
               title="您确定删除吗？"
               @confirm="del(scope.row.id)"
           >
-            <el-button type="danger" slot="reference" v-if="user.role === 'ROLE_ADMIN'">删除 <i class="el-icon-remove-outline"></i></el-button>
+            <el-button type="danger" slot="reference" >删除 <i class="el-icon-remove-outline"></i></el-button>
 
           </el-popconfirm>
         </template>
@@ -161,9 +168,22 @@ export default {
     }
   },
   created() {
-    this.load()
+    this.judge()
     this.loadType()
     this.loadTag()
+
+
+  },
+  mounted() {
+
+        /*  if(this.user.role==='ROLE_ADMIN'){
+            this.user=''
+          }
+          else {
+            this.user=this.user.nickname
+          }*/
+
+
   },
   methods: {
     selectTag(tagId){
@@ -203,14 +223,56 @@ export default {
           pageSize: this.pageSize,
           typeid: this.typeid,
           name: this.name,
+       /*   user:this.user.nickname*/
+
+
+
+          /*if(this.user.role==='ROLE_ADMIN'){
+            user:this.user
+          }*/
+
         }
       }).then(res => {
 
         this.tableData = res.data.records
         this.total = res.data.total
+        console.log(this.tableData)
 
       })
 
+    },
+    load1() {
+      this.request.get("/article/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          typeid: this.typeid,
+          name: this.name,
+          user:this.user.nickname
+
+
+
+          /*if(this.user.role==='ROLE_ADMIN'){
+            user:this.user
+          }*/
+
+        }
+      }).then(res => {
+
+        this.tableData = res.data.records
+        this.total = res.data.total
+        console.log(this.tableData)
+
+      })
+
+    },
+    judge(){
+        if(this.user.role==='ROLE_ADMIN'){
+            this.load()
+          }
+          else {
+          this.load1()
+          }
     },
     loadType() {
       this.request.get("/type").then(res => {
@@ -247,7 +309,7 @@ export default {
       this.request.delete("/article/" + id).then(res => {
         if (res.code === '200') {
           this.$message.success("删除成功")
-          this.load()
+          this.judge()
         } else {
           this.$message.error("删除失败")
         }
@@ -278,7 +340,7 @@ export default {
           console.log(this.tableData[0].id)
 
 
-          this.load()
+          this.judge()
         } else {
           this.$message.error("保存失败")
         }
@@ -297,17 +359,17 @@ export default {
     reset() {
       this.name = ""
       this.typeid=""
-      this.load()
+      this.judge()
     },
     handleSizeChange(pageSize) {
       console.log(pageSize)
       this.pageSize = pageSize
-      this.load()
+      this.judge()
     },
     handleCurrentChange(pageNum) {
       console.log(pageNum)
       this.pageNum = pageNum
-      this.load()
+      this.judge()
     },
     download(url) {
       window.open(url)
@@ -330,7 +392,8 @@ export default {
       }
       this.inputVisible = false;
       this.inputValue = '';
-    }
+    },
+
   }
 }
 </script>

@@ -2,9 +2,9 @@
 <div class="HighlightTable col-xl-8">
   <ul class="col-xl-12" >
     <li v-for="item in tableData.slice(0,8)" :key="item.id" style="margin-top: 10px">
-      <div class="item col-xl-12" v-for="image in list.slice(7,9)" :key="list.id"  @click="$router.push('/rebang/tiezi?id=' + item.id)">
+      <div class="item col-xl-12"   @click="$router.push('/jiaocheng/course?id=' + item.id)">
         <div class="image" >
-          <img :src="image.src" alt="" width="80" height="67">
+          <img :src="item.img" alt="" width="80" height="67">
         </div>
         <el-row class="content">
           <el-col span="24" style="float: left;text-align: left;margin-left: 10px;height: 38px;">
@@ -28,22 +28,12 @@
 export default {
   name: "HighlightTable",
   created() {
-      this.load()
-      this.loadArticle()
+     /* this.load()*/
+      /*this.loadArticle()*/
+    this.loadCourse()
   },
   data(){
     return{
-      list:[
-        {id:'001',src:require('@/assets/images/home/w.jpg'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'002',src:require('@/assets/images/home/table.webp'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'003',src:require('@/assets/images/home/w.jpg'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'004',src:require('@/assets/images/home/table.webp'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'005',src:require('@/assets/images/home/w.jpg'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'006',src:require('@/assets/images/home/table.webp'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'007',src:require('@/assets/images/home/w.jpg'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-        {id:'008',src:require('@/assets/images/home/table.webp'),title:'真我Q5发布会定档',author:'嗷嗷待哺',date:'4月10日'},
-      ],
-
       form: {},
       tableData: [],
       name: '',
@@ -56,7 +46,7 @@ export default {
     }
   },
   methods:{
-    load() {
+    /*load() {
       this.request.get("/article/page", {
         params: {
           pageNum: this.pageNum,
@@ -71,8 +61,8 @@ export default {
 
       })
 
-    },
-    loadArticle() {
+    },*/
+   /* loadArticle() {
 
       this.request.get("/article/"+id).then(res => {
         this.article = res.data
@@ -83,6 +73,19 @@ export default {
         if (res.code === '200') {
           this.$message.success("操作成功")
         }
+      })
+    },*/
+    loadCourse() {
+      this.request.get("/course/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.name,
+        }
+      }).then(res => {
+        this.tableData = res.data.records
+        this.total = res.data.total
+        console.log("hahah"+this.tableData)
       })
     },
   }
